@@ -26,6 +26,7 @@ test("child profiles and unfinished questions keep independent game data", () =>
   const state = createState();
   state.profiles["player-1"].data.player.coins = 4000;
   state.profiles["player-1"].data.session.question = makeQuestion(state.profiles["player-1"].data.player, 'addition');
+  state.view.place = 'party'; state.view.partyStarted = true;
   assert.equal(state.profiles["player-2"].data.player.coins, 0);
   assert.deepEqual(restoreState(JSON.parse(JSON.stringify(state))), JSON.parse(JSON.stringify(state)));
   assert.throws(() => restoreState({ ...state, selectedProfileId: 'unknown' }));

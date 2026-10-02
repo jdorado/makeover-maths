@@ -4,12 +4,15 @@ A little thinking. A lot of magic. A browser maths and fashion game: earn play
 money, unlock studios, choose flowing gowns and hairstyles, enter fashion shows,
 and celebrate three consecutive wins with a party.
 
-- 50 levels, three correct answers per level, Year 1 and Year 3 starting points.
-- Adaptive questions with hints: place value, arithmetic, multiplication,
-  division, fractions, money, measurement, shapes, time and charts.
+- 50 levels, three correct answers per level, with studios, maths topics and
+  fashion styles arriving as visible milestones through level 48.
+- Per-topic adaptive questions with hints. Year 1 introduces topics gradually;
+  Year 3 starts with the full mix.
 - Two independent child profiles, each with their own progress and collection.
 - Illustrated rooms with tap-to-walk and keyboard controls, 15 gown colourways,
-  hair styles and colour sprays, makeup and a runway.
+  hair styles and colour sprays, makeup and a runway with visible theme matches.
+- A free first gown choice, a winnable debut show, and party invitations that
+  are spent only when the player deliberately starts the celebration.
 - Automatic device saves for guests; Google parent login and canonical Mongo
   saves when the five server environment variables are configured.
 

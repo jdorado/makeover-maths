@@ -1,43 +1,44 @@
 export type Place = 'room' | 'wardrobe' | 'hair' | 'makeup' | 'show' | 'party'
 export type Track = 'year1' | 'year3'
 export type Topic = 'mixed' | 'addition' | 'subtraction' | 'place' | 'multiplication' | 'division' | 'fractions' | 'money' | 'measure' | 'time' | 'charts'
+export type SkillTopic = Exclude<Topic, 'mixed'>
 export const assetRoot = '/games/makeover-maths/'
-export type Dress = { id: string; name: string; asset: string; colour: string; filter: string; price: number; quality: number; palette: string }
+export type Dress = { id: string; name: string; asset: string; colour: string; filter: string; price: number; quality: number; palette: string; unlockLevel: number }
 const collections = [
-  { asset: 'teen-lavender.png', title: 'Starlight', price: 0, quality: 3, colours: [
-    ['Lilac', '#bda3dd', 'none', 'purple'], ['Silver', '#d7d6df', 'saturate(.12) brightness(1.12)', 'silver'],
-    ['Royal blue', '#778cd6', 'hue-rotate(-45deg) saturate(1.4)', 'blue'], ['Rose', '#e9a1bc', 'hue-rotate(65deg)', 'pink'], ['Champagne', '#dfbd86', 'hue-rotate(140deg) saturate(.75) brightness(1.08)', 'gold'],
+  { asset: 'teen-lavender.png', title: 'Starlight', quality: 3, colours: [
+    ['Lilac', '#bda3dd', 'none', 'purple', 0, 1], ['Silver', '#d7d6df', 'saturate(.12) brightness(1.12)', 'silver', 0, 1],
+    ['Royal blue', '#778cd6', 'hue-rotate(-45deg) saturate(1.4)', 'blue', 2000, 2], ['Rose', '#e9a1bc', 'hue-rotate(65deg)', 'pink', 3000, 4], ['Champagne', '#dfbd86', 'hue-rotate(140deg) saturate(.75) brightness(1.08)', 'gold', 4000, 6],
   ] },
-  { asset: 'teen-rose.png', title: 'Satin silhouette', price: 2000, quality: 6, colours: [
-    ['Blush', '#e9a5ba', 'none', 'pink'], ['Ruby', '#ad526c', 'hue-rotate(-18deg) saturate(1.65) brightness(.8)', 'red'],
-    ['Gold', '#d6ba8b', 'hue-rotate(65deg) saturate(.65) brightness(1.1)', 'gold'], ['Sage', '#91ad99', 'hue-rotate(150deg) saturate(.5)', 'green'], ['Midnight', '#7483ac', 'hue-rotate(-110deg) saturate(.8) brightness(.72)', 'blue'],
+  { asset: 'teen-rose.png', title: 'Satin silhouette', quality: 6, colours: [
+    ['Blush', '#e9a5ba', 'none', 'pink', 5000, 10], ['Ruby', '#ad526c', 'hue-rotate(-18deg) saturate(1.65) brightness(.8)', 'red', 6000, 14],
+    ['Gold', '#d6ba8b', 'hue-rotate(65deg) saturate(.65) brightness(1.1)', 'gold', 7000, 18], ['Sage', '#91ad99', 'hue-rotate(150deg) saturate(.5)', 'green', 8000, 22], ['Midnight', '#7483ac', 'hue-rotate(-110deg) saturate(.8) brightness(.72)', 'blue', 9000, 26],
   ] },
-  { asset: 'teen-teal.png', title: 'Botanical couture', price: 3000, quality: 8, colours: [
-    ['Teal', '#62b3ad', 'none', 'green'], ['Emerald', '#398a70', 'hue-rotate(-24deg) saturate(1.5) brightness(.82)', 'green'],
-    ['Aqua', '#91cfd1', 'hue-rotate(15deg) brightness(1.12)', 'blue'], ['Orchid', '#b99bc9', 'hue-rotate(115deg) saturate(.65)', 'purple'], ['Pearl', '#dce0da', 'saturate(.08) brightness(1.22)', 'silver'],
+  { asset: 'teen-teal.png', title: 'Botanical couture', quality: 8, colours: [
+    ['Teal', '#62b3ad', 'none', 'green', 10000, 28], ['Emerald', '#398a70', 'hue-rotate(-24deg) saturate(1.5) brightness(.82)', 'green', 12000, 33],
+    ['Aqua', '#91cfd1', 'hue-rotate(15deg) brightness(1.12)', 'blue', 14000, 38], ['Orchid', '#b99bc9', 'hue-rotate(115deg) saturate(.65)', 'purple', 16000, 43], ['Pearl', '#dce0da', 'saturate(.08) brightness(1.22)', 'silver', 18000, 48],
   ] },
 ] as const
 export const dresses: Dress[] = collections.flatMap((collection, c) => collection.colours.map((colour, i) => ({
   id: `${c}-${i}`, name: `${colour[0]} ${collection.title}`, asset: collection.asset, colour: colour[1], filter: colour[2], palette: colour[3],
-  price: c === 0 && i === 0 ? 0 : collection.price + 1000 + i * 500, quality: collection.quality + (i ? 1 : 0),
+  price: colour[4], unlockLevel: colour[5], quality: collection.quality + (i ? 1 : 0),
 })))
 export const hairstyles = [
-  { id: 'waves', name: 'Soft waves', asset: 'teen-lavender.png', price: 0 },
-  { id: 'bun', name: 'Braided low bun', asset: 'hair-bun.png', price: 1500 },
-  { id: 'pony', name: 'High ponytail', asset: 'hair-pony.png', price: 1500 },
+  { id: 'waves', name: 'Soft waves', asset: 'teen-lavender.png', price: 0, unlockLevel: 1 },
+  { id: 'bun', name: 'Braided low bun', asset: 'hair-bun.png', price: 1500, unlockLevel: 3 },
+  { id: 'pony', name: 'High ponytail', asset: 'hair-pony.png', price: 3000, unlockLevel: 12 },
 ] as const
 export const hairColours = [
-  { id: 'brown', name: 'Chestnut', colour: '#6d422c', filter: 'none', price: 0 },
-  { id: 'black', name: 'Midnight', colour: '#322737', filter: 'saturate(.35) brightness(.5)', price: 1000 },
-  { id: 'honey', name: 'Honey', colour: '#b88d52', filter: 'hue-rotate(8deg) saturate(.65) brightness(1.5)', price: 1000 },
-  { id: 'rose', name: 'Rose gold', colour: '#ba758e', filter: 'hue-rotate(-35deg) saturate(.7) brightness(1.4)', price: 1500 },
-  { id: 'purple', name: 'Violet spray', colour: '#8b6bb0', filter: 'hue-rotate(-95deg) saturate(.85) brightness(1.3)', price: 1500 },
+  { id: 'brown', name: 'Chestnut', colour: '#6d422c', filter: 'none', price: 0, unlockLevel: 1 },
+  { id: 'black', name: 'Midnight', colour: '#322737', filter: 'saturate(.35) brightness(.5)', price: 1000, unlockLevel: 5 },
+  { id: 'honey', name: 'Honey', colour: '#b88d52', filter: 'hue-rotate(8deg) saturate(.65) brightness(1.5)', price: 1500, unlockLevel: 15 },
+  { id: 'rose', name: 'Rose gold', colour: '#ba758e', filter: 'hue-rotate(-35deg) saturate(.7) brightness(1.4)', price: 2500, unlockLevel: 25 },
+  { id: 'purple', name: 'Violet spray', colour: '#8b6bb0', filter: 'hue-rotate(-95deg) saturate(.85) brightness(1.3)', price: 4000, unlockLevel: 35 },
 ] as const
 export const makeups = [
-  { id: 'natural', name: 'Fresh face', colour: '#e8b795', price: 0 },
-  { id: 'rose', name: 'Rosy glow', colour: '#e391ad', price: 1000 },
-  { id: 'peach', name: 'Peach shimmer', colour: '#eab084', price: 1000 },
-  { id: 'sparkle', name: 'Golden sparkle', colour: '#d8b781', price: 1500 },
+  { id: 'natural', name: 'Fresh face', colour: '#e8b795', price: 0, unlockLevel: 1 },
+  { id: 'rose', name: 'Rosy glow', colour: '#e391ad', price: 1000, unlockLevel: 7 },
+  { id: 'peach', name: 'Peach shimmer', colour: '#eab084', price: 2000, unlockLevel: 20 },
+  { id: 'sparkle', name: 'Golden sparkle', colour: '#d8b781', price: 4000, unlockLevel: 40 },
 ] as const
 export const topics: { id: Topic; name: string }[] = [
   { id: 'mixed', name: 'Surprise mix' }, { id: 'addition', name: 'Addition' }, { id: 'subtraction', name: 'Subtraction' },
@@ -45,18 +46,22 @@ export const topics: { id: Topic; name: string }[] = [
   { id: 'fractions', name: 'Fractions' }, { id: 'money', name: 'Money & change' }, { id: 'measure', name: 'Measures & shapes' },
   { id: 'time', name: 'Telling time' }, { id: 'charts', name: 'Reading charts' },
 ]
+export const skillTopics = topics.slice(1).map(topic => topic.id as SkillTopic)
 export const studioCosts = { wardrobe: 1000, hair: 2000, makeup: 2000 } as const
 export type Studio = keyof typeof studioCosts
+export const studioUnlockLevels: Record<Studio, number> = { wardrobe: 1, hair: 3, makeup: 5 }
+export const createMastery = (value = 0): Record<SkillTopic, number> => Object.fromEntries(skillTopics.map(topic => [topic, value])) as Record<SkillTopic, number>
+export type ShowResult = { style: number; creativity: number; confidence: number; matchedTheme: boolean; total: number; target: number; won: boolean }
 export type Player = {
-  name: string; track: Track; level: number; levelCorrect: number; coins: number; correct: number; streak: number; adaptive: number;
+  name: string; track: Track; level: number; levelCorrect: number; coins: number; correct: number; streak: number; mastery: Record<SkillTopic, number>;
   owned: string[]; unlocked: Studio[]; credited: string[]; lastMiss: string;
   dress: string; hair: string; hairColour: string; makeup: string;
-  wins: number; showStreak: number; lastShowCorrect: number; partyTickets: number; parties: number; completed: boolean;
+  wins: number; showStreak: number; lastShowCorrect: number; lastShowResult: ShowResult | null; partyTickets: number; parties: number; completed: boolean;
 }
 export function newPlayer(name: string, track: Track): Player {
-  return { name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, adaptive: 0,
+  return { name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, mastery: createMastery(),
     owned: ['dress:0-0', 'hair:waves', 'colour:brown', 'makeup:natural'], unlocked: [], credited: [], lastMiss: '',
-    dress: '0-0', hair: 'waves', hairColour: 'brown', makeup: 'natural', wins: 0, showStreak: 0, lastShowCorrect: -1,
+    dress: '0-0', hair: 'waves', hairColour: 'brown', makeup: 'natural', wins: 0, showStreak: 0, lastShowCorrect: -1, lastShowResult: null,
     partyTickets: 0, parties: 0, completed: false }
 }
 export type Question = { id: string; topic: Topic; prompt: string; answer: string; options: string[]; hint: string; explanation: string;
@@ -69,12 +74,18 @@ type Random = () => number
 function integer(random: Random, min: number, max: number) { return min + Math.floor(random() * (max - min + 1)) }
 function pick<T>(random: Random, values: readonly T[]): T { return values[Math.floor(random() * values.length)] }
 function shuffle<T>(values: T[], random: Random) { for (let i = values.length - 1; i > 0; i--) { const j = integer(random, 0, i); [values[i], values[j]] = [values[j], values[i]] } return values }
-export function difficulty(player: Player) {
-  return Math.max(0, Math.min(player.track === 'year1' ? 4 : 8, Math.round((player.track === 'year3' ? 3 : 0) + (player.level - 1) / 12 + player.adaptive)))
+export function topicUnlockLevel(track: Track, topic: SkillTopic) {
+  if (track === 'year3') return 1
+  return ({ addition: 1, subtraction: 1, place: 1, measure: 1, money: 5, time: 7, charts: 7, multiplication: 10, division: 13, fractions: 16 } satisfies Record<SkillTopic, number>)[topic]
+}
+export function availableTopics(player: Player) { return skillTopics.filter(topic => topicUnlockLevel(player.track, topic) <= player.level) }
+export function difficulty(player: Player, topic: Topic = 'mixed') {
+  const mastery = topic === 'mixed' ? 0 : player.mastery[topic]
+  return Math.max(0, Math.min(player.track === 'year1' ? 4 : 8, Math.round((player.track === 'year3' ? 3 : 0) + (player.level - 1) / 12 + mastery)))
 }
 export function makeQuestion(player: Player, chosen: Topic = 'mixed', random: Random = Math.random): Question {
-  const step = difficulty(player)
-  const topic = chosen === 'mixed' ? pick(random, topics.slice(1).map(t => t.id)) : chosen
+  const topic = chosen === 'mixed' ? pick(random, availableTopics(player)) : chosen
+  const step = difficulty(player, topic)
   const id = `${player.level}-${crypto.randomUUID()}`
   const make = (prompt: string, answer: string, options: string[], hint: string, explanation: string, visual?: Question['visual']): Question => ({ id, topic, prompt, answer, options: shuffle([...new Set([answer, ...options])].slice(0, 4), random), hint, explanation, visual })
   const number = (prompt: string, value: number, hint: string, explanation: string, unit = '', visual?: Question['visual']) => {
@@ -151,51 +162,73 @@ export function makeQuestion(player: Player, chosen: Topic = 'mixed', random: Ra
   return number(`How many ${bars[index].name.toLowerCase()} dresses are in the chart?`, bars[index].value, 'Find the colour label, then read the number next to that bar.', `The ${bars[index].name} bar shows ${bars[index].value} dresses.`, '', { kind: 'chart', bars })
 }
 export function answerQuestion(player: Player, question: Question, answer: string) {
+  const topic: SkillTopic = question.topic === 'mixed' ? 'addition' : question.topic
   if (player.credited.includes(question.id)) return { player, correct: answer === question.answer, duplicate: true }
-  if (answer !== question.answer) return { player: player.lastMiss === question.id ? player : { ...player, streak: 0, lastMiss: question.id, adaptive: Math.max(-2, player.adaptive - .25) }, correct: false, duplicate: false }
+  if (answer !== question.answer) return { player: player.lastMiss === question.id ? player : { ...player, streak: 0, lastMiss: question.id, mastery: { ...player.mastery, [topic]: Math.max(-2, player.mastery[topic] - .25) } }, correct: false, duplicate: false }
   const levelCorrect = player.levelCorrect + 1, advance = levelCorrect >= 3 && !player.completed
   const completed = player.completed || (player.level === 50 && advance)
   return { player: { ...player, coins: player.coins + 1000, correct: player.correct + 1, streak: player.streak + 1,
-    adaptive: Math.min(2, player.adaptive + (player.lastMiss === question.id ? 0 : .15)), credited: [...player.credited, question.id],
+    mastery: { ...player.mastery, [topic]: Math.min(2, player.mastery[topic] + (player.lastMiss === question.id ? 0 : .15)) }, credited: [...player.credited, question.id],
     level: advance && !completed ? player.level + 1 : player.level, levelCorrect: advance && !completed ? 0 : Math.min(3, levelCorrect), completed }, correct: true, duplicate: false }
 }
 export function unlockStudio(player: Player, studio: Studio): Player {
-  if (player.unlocked.includes(studio) || player.coins < studioCosts[studio]) return player
+  if (player.unlocked.includes(studio) || player.level < studioUnlockLevels[studio] || player.coins < studioCosts[studio]) return player
   return { ...player, coins: player.coins - studioCosts[studio], unlocked: [...player.unlocked, studio] }
 }
+function findItem(category: 'dress' | 'hair' | 'colour' | 'makeup', id: string) {
+  return category === 'dress' ? dresses.find(i => i.id === id) : category === 'hair' ? hairstyles.find(i => i.id === id) : category === 'colour' ? hairColours.find(i => i.id === id) : makeups.find(i => i.id === id)
+}
 export function buyItem(player: Player, category: 'dress' | 'hair' | 'colour' | 'makeup', id: string): Player {
-  const item = category === 'dress' ? dresses.find(i => i.id === id) : category === 'hair' ? hairstyles.find(i => i.id === id) : category === 'colour' ? hairColours.find(i => i.id === id) : makeups.find(i => i.id === id)
+  const item = findItem(category, id)
   const studio = category === 'dress' ? 'wardrobe' : category === 'makeup' ? 'makeup' : 'hair'
-  if (!item || !player.unlocked.includes(studio)) return player
+  if (!item || item.unlockLevel > player.level || !player.unlocked.includes(studio)) return player
   const key = `${category}:${id}`, owned = player.owned.includes(key), cost = owned ? 0 : item.price
   if (cost > player.coins) return player
   return { ...player, coins: player.coins - cost, owned: owned ? player.owned : [...player.owned, key], [category === 'colour' ? 'hairColour' : category]: id }
 }
 export const themes = [
-  { name: 'Starlight soirée', palette: 'purple', description: 'Lavender, silver, and a little sparkle.' },
-  { name: 'Rose garden gala', palette: 'pink', description: 'Soft rose tones and graceful details.' },
-  { name: 'Emerald evening', palette: 'green', description: 'Fresh greens and botanical elegance.' },
-  { name: 'Golden hour', palette: 'gold', description: 'Warm golden tones for a glowing entrance.' },
-  { name: 'Midnight magic', palette: 'blue', description: 'Blue, silver, and a touch of mystery.' },
+  { name: 'Starlight soirée', palettes: ['purple', 'silver'], description: 'Lavender, silver, and a little sparkle.' },
+  { name: 'Rose garden gala', palettes: ['pink', 'red'], description: 'Rose, ruby, and graceful details.' },
+  { name: 'Emerald evening', palettes: ['green'], description: 'Fresh greens and botanical elegance.' },
+  { name: 'Golden hour', palettes: ['gold'], description: 'Warm golden tones for a glowing entrance.' },
+  { name: 'Midnight magic', palettes: ['blue', 'silver'], description: 'Blue, silver, and a touch of mystery.' },
 ]
-export function themeFor(player: Player) { return themes[(player.level - 1) % themes.length] }
-export function judgeShow(player: Player) {
+export function themeFor(player: Player) { return themes[(player.correct ? Math.floor((player.correct - 1) / 3) : 0) % themes.length] }
+export function judgeShow(player: Player): ShowResult {
   const gown = dresses.find(d => d.id === player.dress)!, theme = themeFor(player)
-  const style = Math.min(10, gown.quality + (gown.palette === theme.palette ? 2 : 0))
+  const matchedTheme = theme.palettes.includes(gown.palette), style = Math.min(10, gown.quality + (matchedTheme ? 2 : 0))
   const creativity = Math.min(10, 6 + (player.hair !== 'waves' ? 1 : 0) + (player.hairColour !== 'brown' ? 1 : 0) + (player.makeup !== 'natural' ? 2 : 0))
   const confidence = Math.min(10, 6 + player.streak)
-  const total = style + creativity + confidence, target = 20 + Math.floor((player.level - 1) / 17)
-  return { style, creativity, confidence, total, target, won: total >= target }
+  const total = style + creativity + confidence, target = player.wins === 0 ? 18 : 20 + Math.floor((player.level - 1) / 17)
+  return { style, creativity, confidence, matchedTheme, total, target, won: total >= target }
 }
-export function enterShow(player: Player): { player: Player; result: ReturnType<typeof judgeShow> | null } {
+export function enterShow(player: Player): { player: Player; result: ShowResult | null } {
   if (player.correct < 1 || player.correct === player.lastShowCorrect) return { player, result: null }
   const result = judgeShow(player), streak = result.won ? player.showStreak + 1 : 0
-  return { result, player: { ...player, lastShowCorrect: player.correct, wins: player.wins + Number(result.won), showStreak: streak,
+  return { result, player: { ...player, lastShowCorrect: player.correct, lastShowResult: result, wins: player.wins + Number(result.won), showStreak: streak,
     partyTickets: player.partyTickets + Number(result.won && streak % 3 === 0), coins: player.coins + (result.won ? 2000 : 500) } }
 }
 export function enterParty(player: Player): Player {
   if (player.partyTickets < 1) return player
   return { ...player, partyTickets: player.partyTickets - 1, parties: player.parties + 1 }
+}
+export function progressionAtLevel(level: number, track: Track) {
+  const rewards: string[] = []
+  for (const studio of Object.keys(studioUnlockLevels) as Studio[]) if (studioUnlockLevels[studio] === level && studio !== 'wardrobe') rewards.push(`${studio === 'hair' ? 'Hair' : 'Makeup'} studio`)
+  for (const dress of dresses) if (dress.unlockLevel === level && dress.id !== '0-0') rewards.push(dress.name)
+  for (const style of hairstyles) if (style.unlockLevel === level && style.id !== 'waves') rewards.push(style.name)
+  for (const colour of hairColours) if (colour.unlockLevel === level && colour.id !== 'brown') rewards.push(`${colour.name} hair colour`)
+  for (const makeup of makeups) if (makeup.unlockLevel === level && makeup.id !== 'natural') rewards.push(makeup.name)
+  if (track === 'year1') for (const topic of skillTopics) if (topicUnlockLevel(track, topic) === level && level > 1) rewards.push(`${topics.find(item => item.id === topic)!.name} in Surprise mix`)
+  if (level === 50) rewards.push('Final superstar bow')
+  return [...new Set(rewards)]
+}
+export function nextProgression(player: Player) {
+  for (let level = player.level + 1; level <= 50; level++) {
+    const rewards = progressionAtLevel(level, player.track)
+    if (rewards.length) return { level, rewards }
+  }
+  return null
 }
 export function decodeSave(text: string): { players: Player[]; active: number } {
   if (text.length > 300000) throw new Error('That save file is too large.')
@@ -212,8 +245,14 @@ export function decodeSave(text: string): { players: Player[]; active: number } 
       if (typeof n !== 'number' || !Number.isSafeInteger(n) || n < (key === 'level' ? 1 : 0) || n > (key === 'level' ? 50 : key === 'levelCorrect' ? 3 : 10000000)) throw new Error('This save has invalid progress.')
       player[key] = n
     }
-    if (typeof p.adaptive !== 'number' || !Number.isFinite(p.adaptive) || Math.abs(p.adaptive) > 2) throw new Error('This save has invalid difficulty.')
-    player.adaptive = p.adaptive
+    const legacy = typeof p.adaptive === 'number' && Number.isFinite(p.adaptive) && Math.abs(p.adaptive) <= 2 ? p.adaptive : 0
+    if (p.mastery !== undefined && (!p.mastery || typeof p.mastery !== 'object' || Array.isArray(p.mastery))) throw new Error('This save has invalid topic difficulty.')
+    player.mastery = createMastery(legacy)
+    if (p.mastery) for (const topic of skillTopics) {
+      const value = (p.mastery as Record<string, unknown>)[topic]
+      if (typeof value !== 'number' || !Number.isFinite(value) || Math.abs(value) > 2) throw new Error('This save has invalid topic difficulty.')
+      player.mastery[topic] = value
+    }
     if (!Array.isArray(p.owned) || p.owned.some(id => typeof id !== 'string' || !safeIds.has(id))) throw new Error('This save has unknown clothes.')
     player.owned = [...new Set([...player.owned, ...p.owned as string[]])]
     if (!Array.isArray(p.unlocked) || p.unlocked.some(id => !['wardrobe', 'hair', 'makeup'].includes(String(id)))) throw new Error('This save has unknown studios.')
@@ -227,6 +266,15 @@ export function decodeSave(text: string): { players: Player[]; active: number } 
     player.credited = [...new Set(p.credited)] as string[]
     player.lastMiss = typeof p.lastMiss === 'string' ? p.lastMiss.slice(0, 80) : ''
     player.lastShowCorrect = typeof p.lastShowCorrect === 'number' && Number.isSafeInteger(p.lastShowCorrect) ? Math.min(player.correct, Math.max(-1, p.lastShowCorrect)) : -1
+    if (p.lastShowResult !== undefined && p.lastShowResult !== null) {
+      if (!p.lastShowResult || typeof p.lastShowResult !== 'object') throw new Error('This save has an invalid fashion show result.')
+      const result = p.lastShowResult as Record<string, unknown>
+      if (!['style', 'creativity', 'confidence'].every(key => typeof result[key] === 'number' && Number.isSafeInteger(result[key]) && (result[key] as number) >= 0 && (result[key] as number) <= 10)
+        || typeof result.total !== 'number' || result.total !== (result.style as number) + (result.creativity as number) + (result.confidence as number)
+        || typeof result.target !== 'number' || !Number.isSafeInteger(result.target) || result.target < 1 || result.target > 30
+        || typeof result.matchedTheme !== 'boolean' || typeof result.won !== 'boolean' || result.won !== (result.total >= result.target)) throw new Error('This save has an invalid fashion show result.')
+      player.lastShowResult = result as ShowResult
+    }
     player.completed = p.completed === true && player.level === 50 && player.levelCorrect === 3
     return player
   })
