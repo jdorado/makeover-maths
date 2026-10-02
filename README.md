@@ -21,19 +21,19 @@ and celebrate three consecutive wins with a party.
 Node 24 or 25:
 
 ```sh
-npm ci
-npm run dev
+pnpm install --frozen-lockfile
+pnpm run dev
 ```
 
 Open <http://127.0.0.1:5193>. The Vite-only preview is explicit guest play.
 For real Clerk and save API development, configure `.env.local` from
-`.env.example`, link your own Vercel project and run `npm run dev:cloud`.
+`.env.example`, link your own Vercel project and run `pnpm run dev:cloud`.
 Configure the exact development origin with your Clerk development instance.
 
 ```sh
-npm test
-npm run build
-npm run preview
+pnpm test
+pnpm run build
+pnpm run preview
 ```
 
 ## Deploy independently

@@ -4,7 +4,7 @@ Canonical local checkout: `/Users/juancamilo/dev/other/makeover-maths`.
 New browser games belong under `/Users/juancamilo/dev/other/<repository-name>`.
 
 Independent public MIT game. Follow `/Users/juancamilo/dev/specs/_game_browser-spec.md`.
-Work on main and preserve unrelated work. Use npm; run focused game/platform tests,
+Work on main and preserve unrelated work. Use pnpm; run focused game/platform tests,
 build, and the real browser save/resume flow before releasing.
 
 React/DOM owns rendering and deterministic game rules. The copied Clerk bootstrap
