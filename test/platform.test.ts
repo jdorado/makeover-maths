@@ -19,7 +19,7 @@ const input = (gameState = createState(), revision = 0, mutationId = crypto.rand
 
 test("one explicit game ID scopes account documents", () => {
   assert.equal(saveIdentity("parent-a"), `${APP_CONFIG.id}:parent-a`);
-  assert.equal(APP_CONFIG.databaseName, "makeover_maths");
+  assert.equal(APP_CONFIG.databaseName, "learning_games");
 });
 
 test("child profiles and unfinished questions keep independent game data", () => {
@@ -37,6 +37,17 @@ test("verified parent IDs isolate Mongo records and request owner IDs are ignore
   assert.equal(result.status, 200);
   assert.equal((await readAccount(collection, "parent-b")).gameState, null);
   assert.equal((await readAccount(collection, "parent-a")).gameState.gameId, APP_CONFIG.id);
+});
+
+test("shared collection preserves another game's save for the same parent", async () => {
+  const collection = new Collection();
+  const foreign = { _id: "cloudkeepers:parent-a", revision: 7, library: { marker: "reference progress" } };
+  await collection.insertOne(foreign);
+  assert.equal((await readAccount(collection, "parent-a")).gameState, null);
+  assert.equal((await writeAccount(collection, "parent-a", input())).status, 200);
+  assert.equal((await writeAccount(collection, "parent-a", input(createState(), 1))).status, 200);
+  assert.deepEqual(await collection.findOne({ _id: foreign._id }), foreign);
+  assert.equal(collection.docs.size, 2);
 });
 
 test("duplicate mutations are idempotent and stale writes conflict", async () => {

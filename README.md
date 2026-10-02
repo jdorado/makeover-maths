@@ -35,9 +35,13 @@ npm run preview
 
 ## Deploy independently
 
-Use your own Vercel project and app-scoped MongoDB credential. Set the five
-server variables listed in `.env.example`; the browser bundle never reads them.
-Enable Google in Clerk, add the exact app origins and use production keys for
+For another game in this workspace, keep its own Vercel project and reuse the
+existing Cloudkeepers Atlas `learning-games` binding, working private credential,
+`learning_games.game_saves` and Learning Games Clerk production application with
+Google already configured. No new database/password or Google OAuth client is
+required. Set the five server variables listed in `.env.example`; the browser
+bundle never reads them. Independent external operators supply their own
+provider configuration. Add the exact app origins and use production keys for
 production. `APP_ORIGINS` is an exact comma-separated allowlist, without paths or
 trailing slashes. Both Clerk return URLs point to the current game origin.
 

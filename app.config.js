@@ -4,6 +4,6 @@ export const APP_CONFIG = Object.freeze({
   contentVersion: 1,
   guestSaveKey: 'makeover-maths:guest:v1',
   accountCachePrefix: 'makeover-maths:account',
-  databaseName: 'makeover_maths',
+  databaseName: 'learning_games',
   authProvider: 'google',
 });

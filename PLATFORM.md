@@ -5,8 +5,9 @@
 - Vercel project: `makeover-maths`, existing ezenciel team.
 - Production origin: <https://makeover-maths.eztudy.space>.
 - Shared parent identity: existing Clerk Learning Games production application.
-- Dedicated Mongo database: `makeover_maths`, collection `game_saves`.
-- App credential must have `readWrite` on `makeover_maths` only.
+- Shared Atlas binding: existing Cloudkeepers `learning-games` deployment/integration and working private credential.
+- Mongo database: `learning_games`, collection `game_saves`; every read/write is scoped by the server-owned game/parent key.
+- Reuse the existing provider bindings; no new Atlas password or Clerk/Google setup is required. Shared credentials do not provide a database permission boundary between game backends.
 - Source/release branch: `main`; exact release commit is available in GitHub and
   Vercel deployment metadata.
 
@@ -30,8 +31,10 @@ resumed the unfinished next question after reload.
 Production deployment: Vercel Ready at `makeover-maths.eztudy.space`; GitHub
 checks passed for source commit `9f543d6`. Brave guest play verified independent
 profile progress and exact question/hint restoration after reload. The shared
-production Clerk keys, database name and exact app origins are configured; the
-new scoped Atlas password requires owner entry. The save function includes the
+production Clerk keys and exact app origins were configured. The original setup
+requested a separate scoped Atlas password; that requirement is superseded by
+the shared-provider contract. Reuse the working Cloudkeepers Atlas binding and
+`MONGODB_DATABASE=learning_games`. The save function includes the
 shared TypeScript validators explicitly and responds with a setup error while
 the credential is missing, instead of crashing during import.
 
@@ -40,10 +43,18 @@ the branded gown icon, short name Makeover, correct HTTPS origin and Open as Web
 App enabled. Add was submitted; mirroring disconnected when the phone became
 active, so installation completion and standalone launch are not yet confirmed.
 
-Not yet accepted: production Google round trip, app-scoped Atlas credential,
+Not yet accepted: production Google round trip, shared Atlas binding,
 authenticated canonical API/Mongo readback, second Google parent, cross-app
 identity/data isolation and actual phone home-screen installation. These are
 live acceptance checks, not conclusions supplied by the unit tests.
+
+## Shared-binding status — 2 October 2026
+
+Source guidance, environment examples and save scoping now target the shared
+Atlas resource and `learning_games.game_saves`. Provider readback found only the
+reference `cloudkeepers` project connected to that resource. The connection for
+this project remains pending action-time approval; the source change is not
+live Google/Mongo acceptance evidence. Do not create another Atlas password.
 
 ## Environment
 
