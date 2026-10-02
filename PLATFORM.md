@@ -31,7 +31,14 @@ Production deployment: Vercel Ready at `makeover-maths.eztudy.space`; GitHub
 checks passed for source commit `9f543d6`. Brave guest play verified independent
 profile progress and exact question/hint restoration after reload. The shared
 production Clerk keys, database name and exact app origins are configured; the
-new scoped Atlas password requires owner entry.
+new scoped Atlas password requires owner entry. The save function includes the
+shared TypeScript validators explicitly and responds with a setup error while
+the credential is missing, instead of crashing during import.
+
+iPhone Chrome loaded the production game. The Add to Home Screen sheet showed
+the branded gown icon, short name Makeover, correct HTTPS origin and Open as Web
+App enabled. Add was submitted; mirroring disconnected when the phone became
+active, so installation completion and standalone launch are not yet confirmed.
 
 Not yet accepted: production Google round trip, app-scoped Atlas credential,
 authenticated canonical API/Mongo readback, second Google parent, cross-app

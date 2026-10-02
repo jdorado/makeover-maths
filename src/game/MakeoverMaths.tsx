@@ -8,7 +8,7 @@ import type { GameState, Session } from './save'
 import { useAccount } from '../platform/useAccount'
 import './makeover.css'
 
-type IconName = 'star' | 'dress' | 'hair' | 'makeup' | 'home' | 'close' | 'sound' | 'mute' | 'save' | 'help' | 'maths' | 'arrow' | 'lock' | 'check' | 'map'
+type IconName = 'star' | 'dress' | 'hair' | 'makeup' | 'home' | 'close' | 'sound' | 'mute' | 'save' | 'options' | 'help' | 'maths' | 'arrow' | 'lock' | 'check' | 'map'
 function Icon({ name, size = 21 }: { name: IconName; size?: number }) {
   const paths: Record<IconName, ReactNode> = {
     star: <><path d="m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8Z" /><path d="m21 2 .5 1.5L23 4l-1.5.5L21 6l-.5-1.5L19 4l1.5-.5Z" /></>,
@@ -20,6 +20,7 @@ function Icon({ name, size = 21 }: { name: IconName; size?: number }) {
     sound: <><path d="M4 9h4l5-4v14l-5-4H4Z" /><path d="M16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14" /></>,
     mute: <><path d="M4 9h4l5-4v14l-5-4H4Z" /><path d="m17 9 5 6m0-6-5 6" /></>,
     save: <><path d="M5 3h12l4 4v14H3V3Zm2 0v7h10V3M7 21v-7h10v7" /></>,
+    options: <><path d="m9 3-.6 3-2.6 1.5-2.9-1  -2 3.5 2.3 2v3l-2.3 2 2 3.5 2.9-1L8.4 21l.6 3h4l.6-3 2.6-1.5 2.9 1 2-3.5-2.3-2v-3l2.3-2-2-3.5-2.9 1L13.6 6 13 3Z" transform="translate(0 -1.5) scale(1 .9)"/><circle cx="11" cy="11" r="3"/></>,
     help: <><circle cx="12" cy="12" r="9" /><path d="M9 8a3 3 0 1 1 4 3c-1 .5-1 1-1 2m0 3h.01" /></>,
     maths: <><rect x="4" y="2" width="16" height="20" rx="3" /><path d="M8 6h8M8 11h2m4 0h2M8 15h2m4 0h2M8 19h2m4 0h2" /></>,
     arrow: <path d="M4 12h16m-6-6 6 6-6 6" />,
@@ -155,7 +156,7 @@ export function MakeoverMaths() {
   return <main className="mm-app">
     <header className="mm-header"><a className="mm-brand" href="/"><span className="mm-brand-mark"><Icon name="star" size={28} /></span><span>makeover<span className="mm-brand-maths">maths</span><small>A LITTLE THINKING. A LOT OF MAGIC.</small></span></a>
       <div className="mm-player-switch" aria-label="Choose a player">{players.map((p, i) => <button key={i} className={i === active ? 'active' : ''} onClick={() => switchPlayer(i)} aria-pressed={i === active}><span className="mm-avatar">{i ? '✿' : '✦'}</span><span>{p.name}<small>{p.track === 'year1' ? 'Year 1' : 'Year 3'}</small></span></button>)}</div>
-      <div className="mm-header-tools"><div className="mm-wallet"><span>✦</span><div><small>PLAY MONEY</small><strong aria-label={`${player.coins} play dollars`}>{money(player.coins)}</strong></div></div><button className="mm-icon-button" onClick={() => setModal('options')} aria-label="Options" title="Options"><Icon name="save" /></button><button className="mm-icon-button" aria-label={sound ? 'Turn sound off' : 'Turn sound on'} onClick={() => { soundRef.current = !sound; setSound(!sound); if (!sound) chime() }} title={sound ? 'Sound on' : 'Sound off'}><Icon name={sound ? 'sound' : 'mute'} /></button><button className="mm-icon-button" onClick={() => setModal('help')} aria-label="How to play"><Icon name="help" /></button></div>
+      <div className="mm-header-tools"><div className="mm-wallet"><span>✦</span><div><small>PLAY MONEY</small><strong aria-label={`${player.coins} play dollars`}>{money(player.coins)}</strong></div></div><button className="mm-icon-button" onClick={() => setModal('options')} aria-label="Options" title="Options"><Icon name="options" /></button><button className="mm-icon-button" aria-label={sound ? 'Turn sound off' : 'Turn sound on'} onClick={() => { soundRef.current = !sound; setSound(!sound); if (!sound) chime() }} title={sound ? 'Sound on' : 'Sound off'}><Icon name={sound ? 'sound' : 'mute'} /></button><button className="mm-icon-button" onClick={() => setModal('help')} aria-label="How to play"><Icon name="help" /></button></div>
     </header>
     <div className="mm-intro"><div><p className="mm-eyebrow">SOLVE. STYLE. SHINE.</p><h1>Your imagination starts here<span> ✧</span></h1><p>Every little answer opens a beautiful new possibility.</p></div><button className="mm-level-badge" onClick={() => setModal(player.completed ? 'complete' : 'map')}><span className="mm-level-star">✦</span><div><small>{player.completed ? 'ALL 50 COMPLETE' : 'YOUR ADVENTURE'}</small><strong>{player.completed ? 'Maths superstar' : `Level ${player.level} of 50`}</strong><span className="mm-level-dots">{[0, 1, 2].map(i => <i key={i} className={i < player.levelCorrect ? 'filled' : ''} />)}<em>3 answers per level</em></span></div><Icon name="arrow" size={17} /></button></div>
     <nav className="mm-nav" aria-label="Game places">{places.map(p => { const isLocked = p.id === 'party' ? player.partyTickets === 0 : p.id in studioCosts && !player.unlocked.includes(p.id as Studio); return <button key={p.id} className={place === p.id ? 'active' : ''} onClick={() => visit(p.id)} aria-pressed={place === p.id}><Icon name={p.icon} size={18} />{p.title}{isLocked && <Icon name="lock" size={12} />}{p.id === 'party' && player.partyTickets > 0 && <b className="mm-ticket-count">{player.partyTickets}</b>}</button> })}<button className="mm-earn" onClick={openMaths}><Icon name="maths" size={18} />Earn $1,000<Icon name="arrow" size={17} /></button></nav>
