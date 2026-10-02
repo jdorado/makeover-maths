@@ -1,0 +1,4 @@
+.env*
+!.env.example
+.vercel
+makeover-maths-save*.json
