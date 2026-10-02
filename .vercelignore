@@ -2,3 +2,7 @@
 !.env.example
 .vercel
 makeover-maths-save*.json
+
+dist
+node_modules
+.git

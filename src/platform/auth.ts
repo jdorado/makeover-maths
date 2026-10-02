@@ -6,7 +6,7 @@ export interface ParentAuth {
   signIn(): void;
   signOut(): Promise<void>;
 }
-type ClerkClient = { user?: { id: string }; session?: { getToken(): Promise<string | null> }; load(options: unknown): Promise<void>; addListener(callback: () => void): () => void; openSignIn(options: unknown): void; signOut(): Promise<void> }
+type ClerkClient = { user?: { id: string }; session?: { getToken(): Promise<string | null> }; load(options: unknown): Promise<void>; addListener(callback: () => void): () => void; openSignIn(options: unknown): void; signOut(options?: { redirectUrl: string }): Promise<void> }
 declare global { interface Window { Clerk: ClerkClient; __internal_ClerkUICtor: unknown } }
 function loadScript(src: string, publishableKey?: string) {
   return new Promise<void>((resolve, reject) => {
@@ -26,11 +26,11 @@ export function setupParentAuth(): Promise<ParentAuth> {
     if (!/^[a-z0-9.-]+$/i.test(domain)) throw new Error('Invalid parent sign-in configuration.')
     await loadScript(`https://${domain}/npm/@clerk/ui@1/dist/ui.browser.js`)
     await loadScript(`https://${domain}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`, config.publishableKey)
-    const clerk = window.Clerk; await clerk.load({ ui: { ClerkUI: window.__internal_ClerkUICtor } })
+    const clerk = window.Clerk; await clerk.load({ allowedRedirectOrigins: [window.location.origin], afterSignOutUrl: window.location.origin, ui: { ClerkUI: window.__internal_ClerkUICtor } })
     return { get userId() { return clerk.user?.id ?? null }, getToken: async () => clerk.session?.getToken() ?? null,
       onChange(handler: (id: string | null) => void) { return clerk.addListener(() => handler(clerk.user?.id ?? null)) },
       signIn() { clerk.openSignIn({ forceRedirectUrl: window.location.origin, signUpForceRedirectUrl: window.location.origin }) },
-      async signOut() { await clerk.signOut() } }
+      async signOut() { await clerk.signOut({ redirectUrl: window.location.origin }) } }
   })()
   return setup
 }

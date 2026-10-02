@@ -3,7 +3,7 @@
 - Stable game ID: `makeover-maths`.
 - Independent public source: <https://github.com/jdorado/makeover-maths>.
 - Vercel project: `makeover-maths`, existing ezenciel team.
-- Intended production origin: <https://makeover-maths.eztudy.space>.
+- Production origin: <https://makeover-maths.eztudy.space>.
 - Shared parent identity: existing Clerk Learning Games production application.
 - Dedicated Mongo database: `makeover_maths`, collection `game_saves`.
 - App credential must have `readWrite` on `makeover_maths` only.
@@ -26,6 +26,12 @@ question generation, profile separation, bounded save validation, parent
 isolation, revision conflicts, concurrent initial saves, lost acknowledgement
 retry, unauthenticated API rejection). Real Brave guest play earned $1,000 and
 resumed the unfinished next question after reload.
+
+Production deployment: Vercel Ready at `makeover-maths.eztudy.space`; GitHub
+checks passed for source commit `9f543d6`. Brave guest play verified independent
+profile progress and exact question/hint restoration after reload. The shared
+production Clerk keys, database name and exact app origins are configured; the
+new scoped Atlas password requires owner entry.
 
 Not yet accepted: production Google round trip, app-scoped Atlas credential,
 authenticated canonical API/Mongo readback, second Google parent, cross-app
