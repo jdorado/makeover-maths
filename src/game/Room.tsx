@@ -1,7 +1,7 @@
 import { GearArt } from './GearArt'
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { assetRoot, dresses, hairstyles, hairColours, gear } from './game'
+import { assetRoot, dresses, hairstyles, hairColours, gear, competitionFor } from './game'
 import type { Place, Player } from './game'
 
 const dressMask = 'polygon(30% 16.3%, 37% 16.3%, 40% 21.8%, 57% 21.8%, 59% 16.3%, 63% 16.3%, 65% 21%, 62% 24%, 59% 24%, 59% 31%, 64% 41%, 67% 49%, 75% 67%, 99% 94%, 93% 100%, 3% 100%, 3% 94%, 24% 69%, 31% 55%, 39% 39%, 41% 31%, 39% 24%, 33% 24%)'
@@ -32,7 +32,9 @@ export function Room({ player, place, onVisit, dancing, poseKey, onPose }: {
   const onVisitRef = useRef(onVisit), cameraOffset = useRef(0)
   const [walking, setWalking] = useState(false)
   const walkState = useRef(false)
-  const backdrop = place === 'show' || place === 'party' ? 'show-stage.png' : 'dressing-room.png'
+  const event = competitionFor(player)
+  const backdrop = place === 'party' ? 'show-stage.png' : place === 'show' ? event.id === 'runway' ? 'show-stage.png' : `competition-${event.id}.webp` : 'dressing-room.png'
+  const backdropDescription = { runway: 'A luminous fashion runway with flowing curtains and golden stars', sport: 'A sunny mint and blue sports court with team pennants and championship trophies', garden: 'A blooming garden celebration with roses, a gazebo and warm fairy lights', stage: 'A lavender theatre with golden spotlights, a grand piano and a ballet barre' }[event.id]
   onVisitRef.current = onVisit
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
@@ -105,7 +107,7 @@ export function Room({ player, place, onVisit, dancing, poseKey, onPose }: {
       if (marker.current) { marker.current.style.left = `${target.current.x * 100}%`; marker.current.style.top = `${target.current.y * 100}%` }
     }}>
       <div className="mm-picture-world" ref={world}>
-        <img className="mm-room-art" src={assetRoot + backdrop} alt={backdrop === 'dressing-room.png' ? 'An elegant illustrated dressing room with a lavender wardrobe, a glowing mirror, flowers and a makeup vanity' : 'A luminous fashion runway with flowing curtains, golden stars, flowers and a celebration table'} draggable={false} />
+        <img className="mm-room-art" src={assetRoot + backdrop} alt={backdrop === 'dressing-room.png' ? 'An elegant illustrated dressing room with a lavender wardrobe, a glowing mirror, flowers and a makeup vanity' : backdropDescription} draggable={false} />
         <div className="mm-room-glow" />
         {[0, 1, 2, 3, 4, 5].map(i => <span key={i} className="mm-room-twinkle" style={{ left: `${[40, 61, 72, 27, 81, 52][i]}%`, top: `${[27, 36, 18, 49, 52, 63][i]}%`, animationDelay: `${i * .7}s` }}>✧</span>)}
         <div className="mm-actor-shadow" ref={shadow} /><span className="mm-floor-marker" hidden ref={marker}>✧</span>
@@ -121,7 +123,7 @@ export function Room({ player, place, onVisit, dancing, poseKey, onPose }: {
         {dancing && <div className="mm-confetti">{Array.from({ length: 28 }, (_, i) => <i key={i} style={{ left: `${i * 3.6}%`, animationDelay: `${i % 6 * -.4}s`, background: ['#e9b2ca', '#e6c779', '#b4d6c6', '#b1a1d5'][i % 4] }} />)}</div>}
       </div>
     </div>
-    <div className="mm-room-name"><span /> {place === 'party' ? 'The celebration ballroom' : place === 'show' ? 'The starlight runway' : 'The dressing room'} <small>MAKEOVER MATHS</small></div>
+    <div className="mm-room-name"><span /> {place === 'party' ? 'The celebration ballroom' : place === 'show' ? event.name : 'The dressing room'} <small>MAKEOVER MATHS</small></div>
     <div className="mm-room-controls"><div className="mm-dpad" aria-label="Walking controls">{['up', 'left', 'down', 'right'].map(direction => <button key={direction} className={`mm-dpad-${direction}`} aria-label={`Walk ${direction}`} onPointerDown={event => { event.currentTarget.setPointerCapture(event.pointerId); held.current = direction }} onPointerUp={() => { held.current = null }} onPointerCancel={() => { held.current = null }} onLostPointerCapture={() => { held.current = null }} onClick={() => {
       target.current = { x: clamp(position.current.x + (direction === 'left' ? -.055 : direction === 'right' ? .055 : 0), .25, .76), y: clamp(position.current.y + (direction === 'up' ? -.035 : direction === 'down' ? .035 : 0), .755, .935) }; pending.current = null
     }}>⌃</button>)}</div><p>Tap to walk<br /><strong>Touch your character to pose</strong></p><button className="mm-pose-button" onClick={onPose}>✧ Strike a pose</button></div>

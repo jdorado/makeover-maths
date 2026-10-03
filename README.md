@@ -93,3 +93,11 @@ landscape. The room, navigation, voice and progression controls stay visible;
 long studio collections scroll inside their panel. Landscape maths challenges
 place the question beside the answers and hint. Dynamic viewport sizing and safe
 area padding also support Safari toolbars and home-screen launch.
+
+Competition artwork uses generated storybook illustrations to match the gowns:
+22 individual shop items in `public/games/makeover-maths/gear`, with separate
+face-sized makeup overlays. Shoes, bags and hair accessories use the same image
+in the shop and on the character; wearable layers follow the original pose.
+Sports, garden and talent competitions have their own generated room backgrounds.
+Assets are cropped from transparent illustration sheets and stored as WebP.
+Existing item IDs, ownership and competition scoring remain compatible with saves.
