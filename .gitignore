@@ -7,3 +7,7 @@ dist/
 !.env.example
 makeover-maths-save*.json
 .vercel
+
+# Private learning review exports
+*-learning-evidence.json
+learning-exports/

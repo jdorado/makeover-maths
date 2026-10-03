@@ -31,7 +31,10 @@ function validQuestion(raw: unknown): Question | null {
     else if (v.kind === 'shape') { if (!['rectangle', 'triangle', 'square', 'pentagon'].includes(v.shape) || (v.width !== undefined && !bounded(v.width)) || (v.height !== undefined && !bounded(v.height))) throw new Error('Invalid shape.') }
     else throw new Error('Invalid question picture.')
   }
-  return structuredClone(q)
+  return { ...structuredClone(q), activeMs: Number.isFinite(q.activeMs) && q.activeMs! >= 0 ? Math.min(86_400_000, q.activeMs!) : 0,
+    attempts: Number.isSafeInteger(q.attempts) && q.attempts! >= 0 ? q.attempts : 0, helpUsed: q.helpUsed === true,
+    difficulty: Number.isSafeInteger(q.difficulty) && q.difficulty! >= 0 && q.difficulty! <= 8 ? q.difficulty : undefined,
+    year: q.year === 'year1' || q.year === 'year3' ? q.year : undefined }
 }
 export function restoreGameState(raw: unknown): GameState {
   if (!raw || typeof raw !== 'object') throw new Error('Invalid game save.')
@@ -46,6 +49,7 @@ export function restoreGameState(raw: unknown): GameState {
     const rawSession = p.data.session
     if (!rawSession || !topics.some(t => t.id === rawSession.topic) || ![null, 'correct', 'wrong'].includes(rawSession.feedback)) throw new Error('Invalid question session.')
     const question = validQuestion(rawSession.question)
+    if (question) { question.helpUsed ||= rawSession.hint === true; if (rawSession.feedback === 'wrong') question.attempts = Math.max(1, question.attempts || 0) }
     return { question, feedback: question ? rawSession.feedback : null, hint: rawSession.hint === true, topic: rawSession.topic, mathsOpen: rawSession.mathsOpen === true && !!question }
   })
   const place = s.view?.place ?? 'room'

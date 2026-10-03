@@ -19,7 +19,7 @@
   ],
   "functions": {
     "api/save.js": {
-      "includeFiles": "src/game/*.ts"
+      "includeFiles": "src/game/*"
     }
   },
   "installCommand": "pnpm install --frozen-lockfile"

@@ -1,7 +1,7 @@
 # Makeover Maths
 
-Canonical local checkout: `/Users/juancamilo/dev/other/makeover-maths`.
-New browser games belong under `/Users/juancamilo/dev/other/<repository-name>`.
+Canonical local checkout: `/Users/juancamilo/dev/games/makeover-maths`.
+New browser games belong under `/Users/juancamilo/dev/games/<repository-name>`.
 
 Independent public MIT game. Follow `/Users/juancamilo/dev/specs/_game_browser-spec.md`.
 Work on main and preserve unrelated work. Use pnpm; run focused game/platform tests,

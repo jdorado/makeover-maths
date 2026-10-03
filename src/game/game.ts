@@ -1,3 +1,5 @@
+import { restoreEvidence, recordEvidence, evidenceContext } from './evidence.js';
+import type { Evidence } from './evidence.js';
 export type Place = 'room' | 'wardrobe' | 'hair' | 'makeup' | 'show' | 'party'
 export type Track = 'year1' | 'year3'
 export type Topic = 'mixed' | 'addition' | 'subtraction' | 'place' | 'multiplication' | 'division' | 'fractions' | 'money' | 'measure' | 'time' | 'charts'
@@ -53,18 +55,19 @@ export const studioUnlockLevels: Record<Studio, number> = { wardrobe: 1, hair: 3
 export const createMastery = (value = 0): Record<SkillTopic, number> => Object.fromEntries(skillTopics.map(topic => [topic, value])) as Record<SkillTopic, number>
 export type ShowResult = { style: number; creativity: number; confidence: number; matchedTheme: boolean; total: number; target: number; won: boolean }
 export type Player = {
+  evidence: Evidence;
   name: string; track: Track; level: number; levelCorrect: number; coins: number; correct: number; streak: number; mastery: Record<SkillTopic, number>;
   owned: string[]; unlocked: Studio[]; credited: string[]; lastMiss: string;
   dress: string; hair: string; hairColour: string; makeup: string;
   wins: number; showStreak: number; lastShowCorrect: number; lastShowResult: ShowResult | null; partyTickets: number; parties: number; completed: boolean;
 }
 export function newPlayer(name: string, track: Track): Player {
-  return { name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, mastery: createMastery(),
+  return { evidence: restoreEvidence(), name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, mastery: createMastery(),
     owned: ['dress:0-0', 'hair:waves', 'colour:brown', 'makeup:natural'], unlocked: [], credited: [], lastMiss: '',
     dress: '0-0', hair: 'waves', hairColour: 'brown', makeup: 'natural', wins: 0, showStreak: 0, lastShowCorrect: -1, lastShowResult: null,
     partyTickets: 0, parties: 0, completed: false }
 }
-export type Question = { id: string; topic: Topic; prompt: string; answer: string; options: string[]; hint: string; explanation: string;
+export type Question = { activeMs?: number; attempts?: number; helpUsed?: boolean; difficulty?: number; year?: Track; id: string; topic: Topic; prompt: string; answer: string; options: string[]; hint: string; explanation: string;
   visual?: { kind: 'clock'; hour: number; minute: number } | { kind: 'chart'; bars: { name: string; value: number; colour: string }[] }
     | { kind: 'shape'; shape: 'rectangle' | 'triangle' | 'square' | 'pentagon'; width?: number; height?: number }
     | { kind: 'fraction'; numerator: number; denominator: number }
@@ -87,7 +90,7 @@ export function makeQuestion(player: Player, chosen: Topic = 'mixed', random: Ra
   const topic = chosen === 'mixed' ? pick(random, availableTopics(player)) : chosen
   const step = difficulty(player, topic)
   const id = `${player.level}-${crypto.randomUUID()}`
-  const make = (prompt: string, answer: string, options: string[], hint: string, explanation: string, visual?: Question['visual']): Question => ({ id, topic, prompt, answer, options: shuffle([...new Set([answer, ...options])].slice(0, 4), random), hint, explanation, visual })
+  const make = (prompt: string, answer: string, options: string[], hint: string, explanation: string, visual?: Question['visual']): Question => ({ activeMs: 0, attempts: 0, helpUsed: false, difficulty: step, year: player.track, id, topic, prompt, answer, options: shuffle([...new Set([answer, ...options])].slice(0, 4), random), hint, explanation, visual })
   const number = (prompt: string, value: number, hint: string, explanation: string, unit = '', visual?: Question['visual']) => {
     const candidates = shuffle([-3, -2, -1, 1, 2, 3, 5, 10], random).map(d => value + d).filter(n => n >= 0 && n !== value)
     return make(prompt, `${value}${unit}`, candidates.map(n => `${n}${unit}`), hint, explanation, visual)
@@ -161,14 +164,20 @@ export function makeQuestion(player: Player, chosen: Topic = 'mixed', random: Ra
   const index = integer(random, 0, 2)
   return number(`How many ${bars[index].name.toLowerCase()} dresses are in the chart?`, bars[index].value, 'Find the colour label, then read the number next to that bar.', `The ${bars[index].name} bar shows ${bars[index].value} dresses.`, '', { kind: 'chart', bars })
 }
+export function questionContext(player: Player, question: Question) { return evidenceContext(question, question.year || player.track, question.difficulty ?? difficulty(player, question.topic), question.topic, question.activeMs || 0, 'makeover-maths-v1'); }
+export function logQuestion(player: Player, question: Question, type: string = 'question') { const evidence = restoreEvidence(player.evidence); recordEvidence(evidence, questionContext(player, question), type); return { ...player, evidence }; }
 export function answerQuestion(player: Player, question: Question, answer: string) {
   const topic: SkillTopic = question.topic === 'mixed' ? 'addition' : question.topic
   if (player.credited.includes(question.id)) return { player, correct: answer === question.answer, duplicate: true }
+  question.attempts = (question.attempts || 0) + 1;
+  const evidence = restoreEvidence(player.evidence);
+  recordEvidence(evidence, questionContext(player, question), 'answer', { submittedAnswer: String(answer).slice(0, 1000), attempt: question.attempts, correct: answer === question.answer, helpUsed: question.helpUsed === true, independent: answer === question.answer && question.attempts === 1 && !question.helpUsed && player.lastMiss !== question.id });
+  player = { ...player, evidence };
   if (answer !== question.answer) return { player: player.lastMiss === question.id ? player : { ...player, streak: 0, lastMiss: question.id, mastery: { ...player.mastery, [topic]: Math.max(-2, player.mastery[topic] - .25) } }, correct: false, duplicate: false }
   const levelCorrect = player.levelCorrect + 1, advance = levelCorrect >= 3 && !player.completed
   const completed = player.completed || (player.level === 50 && advance)
   return { player: { ...player, coins: player.coins + 1000, correct: player.correct + 1, streak: player.streak + 1,
-    mastery: { ...player.mastery, [topic]: Math.min(2, player.mastery[topic] + (player.lastMiss === question.id ? 0 : .15)) }, credited: [...player.credited, question.id],
+    mastery: { ...player.mastery, [topic]: Math.min(2, player.mastery[topic] + (player.lastMiss === question.id || question.helpUsed ? 0 : .15)) }, credited: [...player.credited, question.id],
     level: advance && !completed ? player.level + 1 : player.level, levelCorrect: advance && !completed ? 0 : Math.min(3, levelCorrect), completed }, correct: true, duplicate: false }
 }
 export function unlockStudio(player: Player, studio: Studio): Player {
@@ -264,6 +273,7 @@ export function decodeSave(text: string): { players: Player[]; active: number } 
     }
     if (!Array.isArray(p.credited) || p.credited.length > 5000 || p.credited.some(id => typeof id !== 'string' || id.length > 80)) throw new Error('This save has invalid question receipts.')
     player.credited = [...new Set(p.credited)] as string[]
+    player.evidence = restoreEvidence(p.evidence);
     player.lastMiss = typeof p.lastMiss === 'string' ? p.lastMiss.slice(0, 80) : ''
     player.lastShowCorrect = typeof p.lastShowCorrect === 'number' && Number.isSafeInteger(p.lastShowCorrect) ? Math.min(player.correct, Math.max(-1, p.lastShowCorrect)) : -1
     if (p.lastShowResult !== undefined && p.lastShowResult !== null) {

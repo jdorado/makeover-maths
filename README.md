@@ -63,3 +63,7 @@ Assets are included locally. [docs/art.md](docs/art.md) records their generation
 Run `node scripts/icons.mjs` to regenerate the branded install icons.
 
 MIT licensed. No player data, credentials or agent runtime are included.
+
+## Learning evidence
+
+Parent review can download exact questions, submitted answers, retries, help and approximate active time. Signed-in evidence stays in private parent-owned saves; guest evidence stays on the device. See [the evidence format and manual EzStudy workflow](LEARNING_EVIDENCE.md).
