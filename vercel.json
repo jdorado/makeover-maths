@@ -20,6 +20,9 @@
   "functions": {
     "api/save.js": {
       "includeFiles": "src/game/*"
+    },
+    "api/learning.js": {
+      "includeFiles": "src/game/*"
     }
   },
   "installCommand": "pnpm install --frozen-lockfile"
