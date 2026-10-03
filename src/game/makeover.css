@@ -150,3 +150,28 @@ body:has(.mm-app){margin:0;background:radial-gradient(ellipse at 70% 0,#f1e8f5 0
   .mm-dialog:has(.mm-question) > .mm-correct-feedback { grid-column: 2; grid-row: 7 / 10; padding: 12px; margin-top: 10px; }
   .mm-dialog:has(.mm-question) > .mm-question-footer { grid-row: 10; }
 }
+
+/* Maths takes the room's place, keeping the purse, progression and studio visible. */
+.mm-maths-room { position: relative; min-width: 0; border: 1px solid #e5d8eb; border-radius: 17px; background: #fffcfb; padding: 22px; overflow-y: auto; overscroll-behavior: contain; }
+.mm-maths-room h2 { font-family: 'Fredoka', sans-serif; font-size: 26px; color: #7f618f; margin: 10px 35px 12px 0; }
+.mm-maths-room .mm-eyebrow { padding-right: 30px; }
+.mm-maths-room .mm-dialog-lead { font-size: 12px; margin-bottom: 10px !important; }
+.mm-maths-room > p[role='status']:empty { display: none; }
+.mm-maths-room > p[role='status'] { font-size: 11px; }
+.mm-maths-room .mm-question { margin: 12px 0; padding: 16px; }
+.mm-maths-room .mm-hint-button { min-height: 44px; }
+.mm-maths-room .mm-correct-feedback { margin-top: 10px; padding: 12px; }
+.mm-maths-room .mm-question-footer { margin-top: 12px; }
+@media(min-width:700px) { .mm-maths-room { height: 100%; min-height: 0; scrollbar-width: thin; } }
+@media(min-width:1000px) and (orientation:landscape) {
+.mm-maths-room { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); column-gap: 16px; align-content: center; }
+.mm-maths-room > * { grid-column: 1 / -1; }
+.mm-maths-room > .mm-secondary { justify-self: start; }
+.mm-maths-room > .mm-question { grid-column: 1; grid-row: 6 / 10; display: flex; flex-direction: column; justify-content: center; }
+.mm-maths-room > .mm-answers { grid-column: 2; grid-row: 6; align-self: start; margin-top: 12px; }
+.mm-maths-room > .mm-try-again { grid-column: 2; grid-row: 7; }
+.mm-maths-room > .mm-hint-button { grid-column: 2; grid-row: 8; }
+.mm-maths-room > .mm-hint { grid-column: 2; grid-row: 9; }
+.mm-maths-room > .mm-correct-feedback { grid-column: 2; grid-row: 7 / 10; }
+.mm-maths-room > .mm-question-footer { grid-row: 10; }
+}
