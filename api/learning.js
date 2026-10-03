@@ -1,7 +1,6 @@
-import { captureSave } from '../server/learning-service.js';
+import { crossGameContext, linkLearner } from '../server/cross-game-learning.js';
 import { verifyToken } from "@clerk/backend";
-import { savesCollection, learningCollection } from "../server/database.js";
-import { MAX_BYTES, readAccount } from "../server/save-service.js";
+import { savesCollection, learningCollection, learnersCollection } from "../server/database.js";
 
 export default async function handler(request, response) {
   response.setHeader("Cache-Control", "private, no-store");
@@ -25,14 +24,17 @@ export default async function handler(request, response) {
     return response.status(401).json({ error: "Sign in again to save online." });
   }
   try {
-    if (Number(request.headers["content-length"]) > MAX_BYTES) return response.status(413).json({ error: "This save is too large." });
-    const collection = await savesCollection();
-    if (request.method === "GET") return response.status(200).json(await readAccount(collection, userId));
-    const input = typeof request.body === "string" ? JSON.parse(request.body) : request.body;
-    const result = await captureSave(collection, await learningCollection(), userId, input);
-    return response.status(result.status).json(result.body);
+    if (request.method === 'PUT') {
+      if (Number(request.headers['content-length']) > 4096) return response.status(413).json({ error: 'Request too large.' });
+      const input = typeof request.body === 'string' ? JSON.parse(request.body) : request.body;
+      if (JSON.stringify(input || {}).length > 4096) return response.status(413).json({ error: 'Request too large.' });
+      const result = await linkLearner(await savesCollection(), await learnersCollection(), userId, input);
+      return response.status(result.status).json(result.body);
+    }
+    const cursor = new URL(request.url, 'https://game.invalid').searchParams.get('cursor') || '';
+    if (cursor && !/^[a-f0-9]{64}$/.test(cursor)) return response.status(400).json({ error: 'Invalid cursor.' });
+    return response.status(200).json(await crossGameContext(await savesCollection(), await learningCollection(), await learnersCollection(), userId, cursor));
   } catch {
     return response.status(503).json({ error: "Online saving is unavailable. The device save is safe." });
   }
 }
-

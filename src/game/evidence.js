@@ -71,11 +71,3 @@ export function startEvidenceClock(current, save) {
     document.removeEventListener('visibilitychange', flush); window.removeEventListener('pagehide', flush);
   };
 }
-export function downloadEvidence(gameId, profiles) {
-  const data = { format: 'learning-evidence-v1', exportedAt: new Date().toISOString(), gameId,
-    timing: 'Approximate cumulative active milliseconds; hidden/unfocused pages, closed questions and idle periods excluded. Not a speed or ability score.',
-    profiles };
-  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
-  const link = document.createElement('a'); link.href = url; link.download = `${gameId}-learning-evidence.json`; link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}

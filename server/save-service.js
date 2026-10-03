@@ -28,7 +28,7 @@ export async function writeAccount(collection, userId, input) {
   if ((current?.revision || 0) !== input.revision || (current?.contentVersion || 0) > gameState.contentVersion) {
     return { status: 409, body: { error: "Another device has a newer save.", ...publicSave(current) } };
   }
-  const next = { _id, revision: input.revision + 1, ...gameState, mutationId: input.mutationId, digest, updatedAt: new Date().toISOString() };
+  const next = { _id, parentId: userId, revision: input.revision + 1, ...gameState, mutationId: input.mutationId, digest, updatedAt: new Date().toISOString() };
   try {
     if (!current) await collection.insertOne(next);
     else {
