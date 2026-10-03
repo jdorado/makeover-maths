@@ -22,3 +22,8 @@ export async function learnersCollection() {
   await savesCollection();
   return (await connection).db(process.env.MONGODB_DATABASE || 'learning_games').collection('learning_learners');
 }
+
+export async function audioCollection() {
+  await savesCollection();
+  return (await connection).db(process.env.MONGODB_DATABASE).collection('game_audio');
+}

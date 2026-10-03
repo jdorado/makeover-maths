@@ -23,6 +23,10 @@
     },
     "api/learning.js": {
       "includeFiles": "src/game/*"
+    },
+    "api/speech.js": {
+      "includeFiles": "public/audio/room.mp3",
+      "maxDuration": 60
     }
   },
   "installCommand": "pnpm install --frozen-lockfile"

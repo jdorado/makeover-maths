@@ -77,8 +77,12 @@ generated clip anchoring the voice for the others. The script uses only `fish-au
 `public/audio/manifest.json` and reuses unchanged clips. Credentials and learner
 information are never included in the audio or browser bundle. Audio buttons stay
 disabled until clips exist; generation requires a valid OpenRouter credential.
-This trial reads activity instructions, not individual generated maths questions
-or isolated phonics sounds. New phonics clips need pronunciation review.
+In the maths dialog, **Read question** generates the current question on demand
+through `/api/speech`, using the same free princess voice. Only the question text
+is sent; answers, hints, profiles and learning records are excluded. Repeat plays
+reuse audio cached in the browser and the shared `game_audio` collection. The
+server requires `OPENROUTER_API_KEY`; there is no paid fallback. Isolated phonics
+clips still need pronunciation review.
 
 The private games credential is stored in 1Password as **Learning Games OpenRouter API Key**.
 
