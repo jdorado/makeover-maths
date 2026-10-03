@@ -5,19 +5,28 @@ import { assetRoot, dresses, hairstyles, hairColours, gear, competitionFor } fro
 import type { Place, Player } from './game'
 
 const dressMask = 'polygon(30% 16.3%, 37% 16.3%, 40% 21.8%, 57% 21.8%, 59% 16.3%, 63% 16.3%, 65% 21%, 62% 24%, 59% 24%, 59% 31%, 64% 41%, 67% 49%, 75% 67%, 99% 94%, 93% 100%, 3% 100%, 3% 94%, 24% 69%, 31% 55%, 39% 39%, 41% 31%, 39% 24%, 33% 24%)'
-const hairMask = 'polygon(20% 0%, 80% 0%, 80% 24%, 55% 24%, 57% 19%, 58% 13%, 54% 7%, 44% 5%, 40% 8%, 40% 13%, 43% 19%, 40% 24%, 20% 24%)'
+// Curved hair-only masks protect the face, ears, neck and clothing from colour spray.
+const faceCutout = 'M43 6 C46 4 51 3.6 54 4.7 C55.5 6 54.7 8.3 54.3 10 C53.6 12 51.5 13.7 48 13.8 C45 13.4 43 11.9 42.5 10 L40.5 9.2 L40 8.4 L41.7 8.1 Z'
+const hairShapes: Record<string, string> = {
+  waves: 'M35 7 C36 2 43 .5 49 .6 C56 0 58 3 58 6 C59 9 57 10 59 12 C63 14 59 16 60 18 C61 21 55 21 52 19 C50 18 52 15 51 13 L44 12 C43 14 43 16 42 18 C42 20 39 18 38 18 C33 17 32 15 34 12 C36 10 34 10 35 7 Z',
+  bun: 'M37 7 C37 3 43 .5 49 .6 C56 0 58 3 57 6 C57 9 56 11 54 12 L53 11 L54 8 L54 5 L48 4 L44 6 L42 9 L43 12 C41 14 37 13 37 11 C36 10 37 8 37 7 Z',
+  pony: 'M34 6 C33 2 37 0 42 .4 L44 1.2 C51 -.3 56 1 57 4 C58 7 56 10 54 12 L53 10 L54 6 L51 4 L47 4 L43 7 L42 11 C41 14 40 17 37 17 C32 16 32 13 33 10 C35 8 34 7 34 6 Z',
+}
+const hairMask = (id: string) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="white" d="${hairShapes[id] ?? hairShapes.waves}"/><path fill="black" d="${faceCutout}"/></svg>`)}")`
 export function Character({ player, thumbnail = false }: { player: Pick<Player, 'dress' | 'hair' | 'hairColour' | 'makeup'> & Partial<Pick<Player, 'equipment'>>; thumbnail?: boolean }) {
   const dress = dresses.find(d => d.id === player.dress) ?? dresses[0]
   const hair = hairstyles.find(h => h.id === player.hair) ?? hairstyles[0]
   const colour = hairColours.find(h => h.id === player.hairColour) ?? hairColours[0]
   const sporty = dress.occasion === 'sport'
+  const nativeShoes = sporty && player.equipment?.shoes === (dress.id === 'sport-mint' ? 'gear-0' : 'gear-1')
+  const replaceShoes = Boolean(player.equipment?.shoes) && !nativeShoes
   const hairStyles = { '--hair-filter': colour.filter } as CSSProperties
   return <span className={`mm-character-art ${thumbnail ? 'thumbnail' : ''} ${sporty ? `is-sport-outfit mm-${dress.id}` : ''}`} style={hairStyles}>
-    <img style={sporty ? undefined : { clipPath: 'inset(23% 0 0 0)' }} src={assetRoot + dress.asset} alt="" draggable={false} />
+    <img className={replaceShoes ? 'mm-body-with-shoes' : undefined} style={sporty ? undefined : { clipPath: 'inset(23% 0 0 0)' }} src={assetRoot + dress.asset} alt="" draggable={false} />
     {/* Replace the original head rather than drawing through transparent hair. */}
     {(!sporty || player.hair !== 'waves') && <img className="mm-head-layer" style={sporty ? { clipPath: 'polygon(20% 0%,80% 0%,80% 16%,60% 16%,60% 21%,40% 21%,40% 16%,20% 16%)' } : undefined} src={assetRoot + hair.asset} alt="" draggable={false} />}
-    {colour.filter !== 'none' && <img className="mm-hair-tint" style={{ clipPath: hairMask }} src={assetRoot + hair.asset} alt="" draggable={false} />}
-    {!sporty && <img className="mm-dress-tint" style={{ filter: dress.filter, clipPath: dressMask }} src={assetRoot + dress.asset} alt="" draggable={false} />}
+    {colour.filter !== 'none' && <img className="mm-hair-tint" style={{ maskImage: hairMask(hair.id), maskSize: '100% 100%', maskRepeat: 'no-repeat', maskMode: 'luminance' }} src={assetRoot + (sporty && player.hair === 'waves' ? dress.asset : hair.asset)} alt="" draggable={false} />}
+    {!sporty && <img className={`mm-dress-tint ${replaceShoes ? 'mm-body-with-shoes' : ''}`} style={{ filter: dress.filter, clipPath: dressMask }} src={assetRoot + dress.asset} alt="" draggable={false} />}
     {Object.entries(player.equipment ?? {}).map(([slot, id]) => {
       const item = gear.find(g => g.id === id)
       if (!item || (sporty && slot === 'shoes' && id === (dress.id === 'sport-mint' ? 'gear-0' : 'gear-1'))) return null

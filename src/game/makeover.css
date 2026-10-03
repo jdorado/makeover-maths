@@ -205,3 +205,22 @@ body:has(.mm-app){margin:0;background:radial-gradient(ellipse at 70% 0,#f1e8f5 0
 .mm-sport-blue .mm-worn-shoes-second { left: 46.2%; top: 83.2%; width: 12.5%; height: 9.2%; }
 .mm-sport-mint .mm-worn-shoes { left: 36.4%; top: 81.5%; width: 10.8%; height: 10%; }
 .mm-sport-mint .mm-worn-shoes-second { left: 45.5%; top: 87.5%; width: 10.8%; height: 8.5%; }
+
+/* Character coordinates always use the portrait art's 2:3 canvas, including cards. */
+.mm-character-art { width: auto; max-width: 100%; aspect-ratio: 2 / 3; margin-inline: auto; }
+.mm-dress-preview .mm-character-art { width: auto; }
+.mm-hair-preview .mm-character-art { position: absolute; top: 0; left: 50%; width: 115px; max-width: none; height: 172px; transform: translateX(-50%); }
+.mm-hair-preview .mm-character-art > img { width: 100%; height: 100%; left: 0; top: 0; transform: none; }
+.mm-colour-grid .mm-hair-preview { height: 55px; margin-bottom: 7px; }
+.mm-worn-shoes { left: 41.4%; top: 94.2%; width: 7.5%; height: 5.1%; transform: rotate(5deg); }
+.mm-worn-shoes .mm-gear-image, .mm-worn-shoes-second .mm-gear-image { object-fit: fill; }
+/* Replace the painted toe instead of placing a second shoe over it. */
+.mm-character-art:not(.is-sport-outfit) > .mm-body-with-shoes { mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpath fill='white' fill-rule='evenodd' d='M0 0H100V100H0Z M43 94.3C41 95 40.5 97 41.5 98.6C43 100 47 100 48.5 98C49 96.3 47.5 95 46.5 94.3Z'/%3E%3C/svg%3E"); mask-size: 100% 100%; }
+.mm-hair-preview .mm-gear-image { position: static; width: 100%; height: 100%; max-width: 100%; transform: none; }
+
+.mm-sport-blue > .mm-body-with-shoes { mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22white%22%20fill-rule%3D%22evenodd%22%20d%3D%22M0%200H100V100H0Z%20M25%2085H37V97H23V94Z%20M47%2083H57L60%2091V94H45Z%22/%3E%3C/svg%3E"); mask-size: 100% 100%; }
+
+.mm-sport-mint > .mm-body-with-shoes { mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22white%22%20fill-rule%3D%22evenodd%22%20d%3D%22M0%200H100V100H0Z%20M37%2081H46V92H34Z%20M46%2087H55L57%2096H44Z%22/%3E%3C/svg%3E"); mask-size: 100% 100%; }
+
+.is-sport-outfit .mm-worn-shoes { transform: rotate(9deg); }
+.is-sport-outfit .mm-worn-shoes-second { transform: rotate(-10deg); }

@@ -1,8 +1,8 @@
 import { assetRoot } from './game'
 import type { Gear } from './game'
 
-/** The shop and character use the same illustrated item, with face-sized makeup overlays. */
+/** The shop and character use the same illustrated item, with fitted worn variants for shoes, earrings and makeup. */
 export function GearArt({ item, wearing = false }: { item: Gear; wearing?: boolean }) {
-  const face = wearing && (item.slot === 'eyes' || item.slot === 'lips' || item.slot === 'earrings')
+  const face = wearing && (item.slot === 'eyes' || item.slot === 'lips' || item.slot === 'earrings' || item.slot === 'shoes')
   return <img className="mm-gear-image" src={`${assetRoot}gear/${item.id}${face ? '-worn' : ''}.webp`} alt={item.name} draggable={false} />
 }
