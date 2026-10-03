@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { answerQuestion, availableTopics, buyItem, createMastery, decodeSave, difficulty, dresses, enterParty, enterShow, judgeShow, makeQuestion, newPlayer, progressionAtLevel, topics, unlockStudio } from '../src/game/game.ts'
+import { gear, competitionFor, questionReward, answerQuestion, availableTopics, buyItem, createMastery, decodeSave, difficulty, dresses, enterParty, enterShow, judgeShow, makeQuestion, newPlayer, progressionAtLevel, topics, unlockStudio } from '../src/game/game.ts'
 
 test('a question pays once, mistakes preserve money, and studios and purchases charge once', () => {
   let p = newPlayer('Test', 'year1')
@@ -87,9 +87,10 @@ test('surprise mix introduces Year 1 topics gradually and mastery stays per topi
 test('150 correct answers finish all 50 levels and one player cannot change another', () => {
   let p = newPlayer('First', 'year1')
   const other = newPlayer('Second', 'year3'), untouched = structuredClone(other)
-  for (let i = 0; i < 150; i++) { const q = makeQuestion(p, 'addition'); p = answerQuestion(p, q, q.answer).player }
+  let earned = 0
+  for (let i = 0; i < 150; i++) { const q = makeQuestion(p, 'addition'); earned += questionReward(q); p = answerQuestion(p, q, q.answer).player }
   assert.equal(p.level, 50); assert.equal(p.levelCorrect, 3); assert.equal(p.completed, true)
-  assert.equal(p.correct, 150); assert.equal(p.coins, 150000)
+  assert.equal(p.correct, 150); assert.equal(p.coins, earned); assert.ok(earned > 150000)
   assert.deepEqual(other, untouched)
   assert.ok(difficulty(newPlayer('Older', 'year3')) > difficulty(newPlayer('Younger', 'year1')))
 })
@@ -140,4 +141,39 @@ test('every topic and difficulty produces four distinct choices with exactly one
     if (arithmetic) { const a = Number(arithmetic[1]), b = Number(arithmetic[3]); assert.equal(Number(q.answer), arithmetic[2] === '+' ? a + b : arithmetic[2] === '−' ? a - b : a * b) }
     if (q.visual?.kind === 'clock') assert.equal(q.answer, `${q.visual.hour}:${String(q.visual.minute).padStart(2, '0')}`)
   }
+})
+
+
+test('selected difficulty changes the problem range and pays once after resume', () => {
+  const p = { ...newPlayer('Test', 'year1'), challenge: 4 }
+  const q = makeQuestion(p, 'addition', () => .9)
+  assert.equal(q.difficulty, 4); assert.equal(questionReward(q), 3000)
+  const earned = answerQuestion(p, q, q.answer).player
+  assert.equal(earned.coins, 3000)
+  const resumed = decodeSave(JSON.stringify({ version: 1, players: [earned, newPlayer('Other', 'year3')] })).players[0]
+  assert.equal(resumed.challenge, 4); assert.equal(answerQuestion(resumed, q, q.answer).player.coins, 3000)
+})
+
+test('sports gear improves sports readiness; purchases and free re-equipping survive saves', () => {
+  let p = { ...newPlayer('Test', 'year1'), level: 12, coins: 50000, correct: 1, streak: 5, competition: 'sport' as const, unlocked: ['wardrobe', 'hair', 'makeup'] as const }
+  let player = { ...p, unlocked: [...p.unlocked] }
+  assert.equal(judgeShow(player).won, false)
+  for (const g of gear.filter(g => g.occasion === 'sport' && g.quality === 5)) player = buyItem(player, 'gear', g.id)
+  assert.equal(judgeShow(player).won, true)
+  const before = player.coins
+  const item = gear.find(g => g.name === 'Team trainers')!
+  player = buyItem(player, 'gear', item.id); assert.equal(player.coins, before)
+  const result = enterShow(player); assert.equal(result.player.coins, before + competitionFor(player).prize)
+  assert.equal(enterShow(result.player).result, null)
+  const restored = decodeSave(JSON.stringify({ version: 1, players: [result.player, newPlayer('Other', 'year3')] })).players[0]
+  assert.deepEqual(restored.equipment, player.equipment); assert.equal(restored.competition, 'sport')
+  const corrupt = { ...restored, equipment: { shoes: 'gear-9' } }
+  assert.throws(() => decodeSave(JSON.stringify({ version: 1, players: [corrupt, restored] })))
+})
+
+test('legacy players get safe progression defaults and locked competitions cannot pay', () => {
+  const legacy: any = newPlayer('Old', 'year1'); delete legacy.equipment; delete legacy.challenge; delete legacy.competition
+  const restored = decodeSave(JSON.stringify({ version: 1, players: [legacy, legacy] })).players[0]
+  assert.deepEqual(restored.equipment, {}); assert.equal(restored.challenge, null); assert.equal(restored.competition, 'runway')
+  assert.equal(enterShow({ ...restored, competition: 'stage', correct: 1 }).result, null)
 })

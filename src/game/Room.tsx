@@ -1,11 +1,12 @@
+import { GearArt } from './GearArt'
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { assetRoot, dresses, hairstyles, hairColours } from './game'
+import { assetRoot, dresses, hairstyles, hairColours, gear } from './game'
 import type { Place, Player } from './game'
 
 const dressMask = 'polygon(30% 16.3%, 37% 16.3%, 40% 21.8%, 57% 21.8%, 59% 16.3%, 63% 16.3%, 65% 21%, 62% 24%, 59% 24%, 59% 31%, 64% 41%, 67% 49%, 75% 67%, 99% 94%, 93% 100%, 3% 100%, 3% 94%, 24% 69%, 31% 55%, 39% 39%, 41% 31%, 39% 24%, 33% 24%)'
 const hairMask = 'polygon(20% 0%, 80% 0%, 80% 24%, 55% 24%, 57% 19%, 58% 13%, 54% 7%, 44% 5%, 40% 8%, 40% 13%, 43% 19%, 40% 24%, 20% 24%)'
-export function Character({ player, thumbnail = false }: { player: Pick<Player, 'dress' | 'hair' | 'hairColour' | 'makeup'>; thumbnail?: boolean }) {
+export function Character({ player, thumbnail = false }: { player: Pick<Player, 'dress' | 'hair' | 'hairColour' | 'makeup'> & Partial<Pick<Player, 'equipment'>>; thumbnail?: boolean }) {
   const dress = dresses.find(d => d.id === player.dress) ?? dresses[0]
   const hair = hairstyles.find(h => h.id === player.hair) ?? hairstyles[0]
   const colour = hairColours.find(h => h.id === player.hairColour) ?? hairColours[0]
@@ -16,6 +17,7 @@ export function Character({ player, thumbnail = false }: { player: Pick<Player, 
     <img className="mm-head-layer" src={assetRoot + hair.asset} alt="" draggable={false} />
     {colour.filter !== 'none' && <img className="mm-hair-tint" style={{ clipPath: hairMask }} src={assetRoot + hair.asset} alt="" draggable={false} />}
     <img className="mm-dress-tint" style={{ filter: dress.filter, clipPath: dressMask }} src={assetRoot + dress.asset} alt="" draggable={false} />
+    {Object.entries(player.equipment ?? {}).map(([slot, id]) => { const item = gear.find(g => g.id === id); return item && <span key={slot} className={`mm-worn-gear mm-worn-${slot}`} style={{ color: item.colour }} title={item.name}><GearArt item={item} wearing /></span> })}
     {player.makeup !== 'natural' && <span className={`mm-face-detail ${player.makeup}`}><i /><b /><em>✧</em></span>}
   </span>
 }
