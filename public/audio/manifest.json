@@ -1,0 +1,66 @@
+{
+  "room": {
+    "digest": "3a151d6a8d674358247baeecabd9a6045c726f00d89cc335b0c2874f85a2c225",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Welcome, designer! Tap the rug to walk. Choose a studio to explore. Solve a maths question to earn play money for your styles.",
+    "generationId": "gen-tts-1791024996-XLBJN4LDMygNGBuwkdbW",
+    "bytes": 147956
+  },
+  "wardrobe": {
+    "digest": "44e1b56049d8981ac0f021a6996bc6aa25f5389f21be785c8699096ad3d153a2",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Choose a gown you love. Solve maths questions to earn play money. Styles you buy are yours to wear again.",
+    "generationId": "gen-tts-1791025000-8ja1QUrVLOiRFi0Vau3n",
+    "bytes": 110340
+  },
+  "hair": {
+    "digest": "a2d0cc0805394acca6816262e6ca8eb83530d7098f022e472d0752a36a457bc7",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Choose a hairstyle and a colour you like. You can wear styles you already own for free.",
+    "generationId": "gen-tts-1791025004-y4yhWP5UDfxNDqX1XoZJ",
+    "bytes": 86516
+  },
+  "makeup": {
+    "digest": "05ff25db543cfb6514d89ed649121cbe901c6717857803b6cc2a96c33a24c1a0",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Choose your favourite makeup. Keep practising maths to unlock more styles.",
+    "generationId": "gen-tts-1791025007-VmpM1HiPTlKZ4wwVkiyp",
+    "bytes": 76067
+  },
+  "show": {
+    "digest": "eca962710aa9ca69f9cedcef1bf407f8ffe535781ee2014e39ae49f3ac82ccfe",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Choose an outfit that matches the show theme. Solve a fresh maths question, then take the stage!",
+    "generationId": "gen-tts-1791025009-k6YG3eMVMvUg3OYGZJa1",
+    "bytes": 99055
+  },
+  "party": {
+    "digest": "bba5d12701131da79417a764290fd7779dd1575160e8d24da79bc1d4d1c6d92b",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Win three fashion shows in a row to earn a party invitation. Then celebrate with a little dance!",
+    "generationId": "gen-tts-1791025013-iXfwb1SVAjlVWAs7DIpy",
+    "bytes": 104488
+  },
+  "maths": {
+    "digest": "c4808bf8b10c15d415b2a118991fdafa1b83644da05620fc253e6d402930d235",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Read the question and choose your answer. Take your time. If you need help, tap the little hint. You can always try again.",
+    "generationId": "gen-tts-1791025016-x7P6LMaSWvRZ6EqRs5w7",
+    "bytes": 120789
+  },
+  "help": {
+    "digest": "48e28e6fe76ff3a89f8f05fd0d5b8f0c817e5b0cbcfe23823085128e5c3bc733",
+    "model": "fish-audio/s2.1-pro-free:free",
+    "style": "[gentle female fairy-tale princess voice, warm and friendly, light melodic tone, clear British English, unhurried storytelling, speaking not singing]",
+    "text": "Welcome to Makeover Maths! Solve questions to earn play money. Use it to open studios and choose your look. Enter fashion shows, earn party invitations, and enjoy your adventure!",
+    "generationId": "gen-tts-1791025020-nNZDEzz3m7hHjjKUVh4a",
+    "bytes": 194768
+  }
+}

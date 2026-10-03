@@ -39,3 +39,7 @@ body:has(.mm-app){margin:0;background:radial-gradient(ellipse at 70% 0,#f1e8f5 0
 .mm-event-list { grid-template-columns:repeat(2,minmax(0,1fr)); }.mm-event-list button { padding:10px; font-size:12px; }.mm-event-list span { font-size:11px; }
 
 .mm-gear-art { display:block; width:80px; height:64px; }.mm-gear-art svg { width:100%; height:100%; }.mm-worn-gear { width:18%; height:15%; }.mm-worn-gear svg { width:100%; height:100%; }.mm-worn-shoes { bottom:1%; left:43%; width:17%; height:11%; }.mm-worn-accessory { top:2%; left:39%; width:23%; height:9%; }.mm-worn-eyes,.mm-worn-lips { width:6%; height:4%; }
+
+.mm-voice-guide { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; padding: .7rem 0; }
+.mm-voice-guide p { margin: 0; flex: 1 1 260px; font-size: .85rem; color: #61516e; }
+.mm-voice-guide [role="status"] { font-size: .85rem; }

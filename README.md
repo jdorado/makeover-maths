@@ -67,3 +67,17 @@ MIT licensed. No player data, credentials or agent runtime are included.
 ## Learning evidence
 
 Parent review can download exact questions, submitted answers, retries, help and approximate active time. Signed-in evidence stays in private parent-owned saves; guest evidence stays on the device. See [the evidence format and manual EzStudy workflow](LEARNING_EVIDENCE.md).
+
+### Free voice trial
+
+The **Read instructions** buttons play bundled MP3 instructions for each studio,
+the maths activity and help. Generate the clips with `node scripts/generate-voice.mjs`,
+supplying `OPENROUTER_API_KEY` privately in the process environment. The narrator uses a gentle female fairy-tale princess style, with the first
+generated clip anchoring the voice for the others. The script uses only `fish-audio/s2.1-pro-free:free`, with no paid fallback. It saves provenance in
+`public/audio/manifest.json` and reuses unchanged clips. Credentials and learner
+information are never included in the audio or browser bundle. Audio buttons stay
+disabled until clips exist; generation requires a valid OpenRouter credential.
+This trial reads activity instructions, not individual generated maths questions
+or isolated phonics sounds. New phonics clips need pronunciation review.
+
+The private games credential is stored in 1Password as **Learning Games OpenRouter API Key**.
