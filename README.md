@@ -81,3 +81,11 @@ This trial reads activity instructions, not individual generated maths questions
 or isolated phonics sounds. New phonics clips need pronunciation review.
 
 The private games credential is stored in 1Password as **Learning Games OpenRouter API Key**.
+
+### Tablet play surface
+
+On iPad-sized screens, the game fills the available viewport in portrait and
+landscape. The room, navigation, voice and progression controls stay visible;
+long studio collections scroll inside their panel. Landscape maths challenges
+place the question beside the answers and hint. Dynamic viewport sizing and safe
+area padding also support Safari toolbars and home-screen launch.
