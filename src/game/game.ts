@@ -5,7 +5,7 @@ export type Track = 'year1' | 'year3'
 export type Topic = 'mixed' | 'addition' | 'subtraction' | 'place' | 'multiplication' | 'division' | 'fractions' | 'money' | 'measure' | 'time' | 'charts'
 export type SkillTopic = Exclude<Topic, 'mixed'>
 export const assetRoot = '/games/makeover-maths/'
-export type Dress = { id: string; name: string; asset: string; colour: string; filter: string; price: number; quality: number; palette: string; unlockLevel: number }
+export type Dress = { id: string; name: string; asset: string; colour: string; filter: string; price: number; quality: number; palette: string; unlockLevel: number; occasion?: Occasion }
 const collections = [
   { asset: 'teen-lavender.png', title: 'Starlight', quality: 3, colours: [
     ['Lilac', '#bda3dd', 'none', 'purple', 0, 1], ['Silver', '#d7d6df', 'saturate(.12) brightness(1.12)', 'silver', 0, 1],
@@ -24,6 +24,11 @@ export const dresses: Dress[] = collections.flatMap((collection, c) => collectio
   id: `${c}-${i}`, name: `${colour[0]} ${collection.title}`, asset: collection.asset, colour: colour[1], filter: colour[2], palette: colour[3],
   price: colour[4], unlockLevel: colour[5], quality: collection.quality + (i ? 1 : 0),
 })))
+// Sportswear uses complete generated bodies rather than tinting a gown.
+dresses.push(
+  { id: 'sport-mint', name: 'Mint team uniform', asset: 'sport-mint.webp', colour: '#68aaa0', filter: 'none', price: 0, quality: 3, palette: 'green', unlockLevel: 3, occasion: 'sport' },
+  { id: 'sport-blue', name: 'Royal blue team kit', asset: 'sport-blue.webp', colour: '#528aca', filter: 'none', price: 2500, quality: 4, palette: 'blue', unlockLevel: 3, occasion: 'sport' },
+)
 export const hairstyles = [
   { id: 'waves', name: 'Soft waves', asset: 'teen-lavender.png', price: 0, unlockLevel: 1 },
   { id: 'bun', name: 'Braided low bun', asset: 'hair-bun.png', price: 1500, unlockLevel: 3 },
@@ -42,7 +47,7 @@ export const makeups = [
   { id: 'peach', name: 'Peach shimmer', colour: '#eab084', price: 2000, unlockLevel: 20 },
   { id: 'sparkle', name: 'Golden sparkle', colour: '#d8b781', price: 4000, unlockLevel: 40 },
 ] as const
-export type GearSlot = 'shoes' | 'bag' | 'accessory' | 'eyes' | 'lips'
+export type GearSlot = 'shoes' | 'bag' | 'accessory' | 'eyes' | 'lips' | 'necklace' | 'ring' | 'bracelet' | 'earrings' | 'glasses' | 'mask'
 export type Occasion = 'runway' | 'sport' | 'garden' | 'stage'
 export type Gear = { id: string; slot: GearSlot; name: string; price: number; quality: number; occasion: Occasion; unlockLevel: number; symbol: string; colour: string }
 export const gear: Gear[] = [
@@ -59,15 +64,28 @@ export const gear: Gear[] = [
   ['eyes', 'Pearl sparkle eyes', 12500, 6, 'runway', '✧', '#ddbd7a'],
   ['lips', 'Peach lip balm', 1000, 2, 'sport', '♡', '#e9ad87'], ['lips', 'Rose lip gloss', 3500, 3, 'garden', '♡', '#df8ca7'],
   ['lips', 'Stage berry gloss', 7000, 5, 'stage', '♡', '#b55e8e'], ['lips', 'Golden gloss', 15000, 6, 'runway', '♡', '#ddbd7a'],
+  ['necklace', 'Team star necklace', 1000, 2, 'sport', '✦', '#68aaa0'], ['necklace', 'Blossom necklace', 3000, 3, 'garden', '✿', '#df8ca7'],
+  ['necklace', 'Stage star necklace', 5500, 4, 'stage', '✦', '#bb91ca'], ['necklace', 'Pearl necklace', 8500, 5, 'runway', '✧', '#ddbd7a'],
+  ['ring', 'Team star ring', 700, 1, 'sport', '✦', '#68aaa0'], ['ring', 'Blossom ring', 1800, 2, 'garden', '✿', '#df8ca7'],
+  ['ring', 'Amethyst star ring', 3500, 3, 'stage', '✦', '#bb91ca'], ['ring', 'Pearl ring', 5000, 4, 'runway', '✧', '#ddbd7a'],
+  ['bracelet', 'Team wristband', 800, 2, 'sport', '✦', '#68aaa0'], ['bracelet', 'Blossom bracelet', 2200, 3, 'garden', '✿', '#df8ca7'],
+  ['bracelet', 'Stage star bracelet', 4500, 4, 'stage', '✦', '#bb91ca'], ['bracelet', 'Pearl bracelet', 6500, 5, 'runway', '✧', '#ddbd7a'],
+  ['earrings', 'Team star earrings', 900, 1, 'sport', '✦', '#68aaa0'], ['earrings', 'Blossom earrings', 2400, 2, 'garden', '✿', '#df8ca7'],
+  ['earrings', 'Stage crystal earrings', 4000, 3, 'stage', '✦', '#bb91ca'], ['earrings', 'Pearl earrings', 7000, 4, 'runway', '✧', '#ddbd7a'],
+  ['glasses', 'Team sport glasses', 1500, 2, 'sport', '✦', '#68aaa0'], ['glasses', 'Rose garden sunglasses', 3200, 3, 'garden', '✿', '#df8ca7'],
+  ['glasses', 'Lavender stage glasses', 5000, 4, 'stage', '✦', '#bb91ca'], ['glasses', 'Pearl cat-eye glasses', 7500, 5, 'runway', '✧', '#ddbd7a'],
+  ['mask', 'Lavender star mask', 6000, 4, 'stage', '✦', '#bb91ca'], ['mask', 'Pearl masquerade mask', 9000, 5, 'runway', '✧', '#ddbd7a'],
 ].map((row, i) => ({ id: `gear-${i}`, slot: row[0] as GearSlot, name: row[1] as string, price: row[2] as number, quality: row[3] as number, occasion: row[4] as Occasion, unlockLevel: 1, symbol: row[5] as string, colour: row[6] as string }))
 export const competitions = [
-  { id: 'runway', name: 'Starlight runway', description: 'Match the gown palette. Elegant shoes and a purse add polish.', target: 18, prize: 2000, level: 1 },
-  { id: 'sport', name: 'Sports team trials', description: 'Plan a practical kit: trainers, sports bag and a team headband. Gown colour does not earn points here.', target: 23, prize: 4500, level: 3 },
-  { id: 'garden', name: 'Garden celebration', description: 'Flower flats, a flower purse and a crown suit this outdoor occasion.', target: 25, prize: 6000, level: 6 },
-  { id: 'stage', name: 'Talent stage final', description: 'Stage shoes, a bow, a clutch and stage makeup complete your performance look.', target: 28, prize: 10000, level: 12 },
+  { id: 'runway', name: 'Starlight runway', description: 'Dress for the lavender and gold runway. Pearl shoes, a purse, jewellery and a tiara add polish.', target: 18, prize: 750, level: 1 },
+  { id: 'sport', name: 'Sports team trials', description: 'Wear a team uniform on the mint and blue court. Trainers, a kit bag, a headband and a wristband build your team look.', target: 23, prize: 1200, level: 3 },
+  { id: 'garden', name: 'Garden celebration', description: 'Dress for the blooming garden. Floral gowns, flower flats, a purse, blossom jewellery and a crown suit the celebration.', target: 25, prize: 1800, level: 6 },
+  { id: 'stage', name: 'Talent stage final', description: 'Perform in the lavender theatre. A gown, stage shoes, a bow, star jewellery and an optional masquerade mask complete your look.', target: 28, prize: 2500, level: 12 },
 ] as const
-export const challengeReward = (step: number) => 1000 + Math.max(0, Math.min(8, Math.floor(step))) * 500
-export const questionReward = (question: Question) => challengeReward(question.difficulty ?? 0)
+export const challengeReward = (step: number) => 250 + Math.max(0, Math.min(8, Math.floor(step))) * 100
+export const questionReward = (question: Question) => Math.floor(challengeReward(question.difficulty ?? 0) * (question.helpUsed || (question.attempts || 0) > 1 ? .5 : 1))
+export const starReward = (question: Question) => question.helpUsed || (question.attempts || 0) > 1 ? 0 : 1 + Math.floor((question.difficulty ?? 0) / 2)
+export const itemStars = (price: number) => Math.max(1, Math.ceil(price / 2000))
 export function competitionFor(player: Player) { return competitions.find(c => c.id === player.competition) ?? competitions[0] }
 export const topics: { id: Topic; name: string }[] = [
   { id: 'mixed', name: 'Surprise mix' }, { id: 'addition', name: 'Addition' }, { id: 'subtraction', name: 'Subtraction' },
@@ -76,12 +94,14 @@ export const topics: { id: Topic; name: string }[] = [
   { id: 'time', name: 'Telling time' }, { id: 'charts', name: 'Reading charts' },
 ]
 export const skillTopics = topics.slice(1).map(topic => topic.id as SkillTopic)
-export const studioCosts = { wardrobe: 1000, hair: 2000, makeup: 2000 } as const
+export const studioCosts = { wardrobe: 250, hair: 2000, makeup: 2000 } as const
 export type Studio = keyof typeof studioCosts
 export const studioUnlockLevels: Record<Studio, number> = { wardrobe: 1, hair: 3, makeup: 5 }
 export const createMastery = (value = 0): Record<SkillTopic, number> => Object.fromEntries(skillTopics.map(topic => [topic, value])) as Record<SkillTopic, number>
-export type ShowResult = { style: number; creativity: number; confidence: number; matchedTheme: boolean; total: number; target: number; won: boolean }
+export type ShowResult = { prize?: number; style: number; creativity: number; confidence: number; matchedTheme: boolean; total: number; target: number; won: boolean }
 export type Player = {
+  designStars: number; lastLooks: Partial<Record<Occasion, string[]>>;
+  qualifier: { id: string; event: Occasion; deadline: number; count: number; required: number; finishedAt: number } | null; usedItems: string[];
   equipment: Partial<Record<GearSlot, string>>; challenge: number | null; competition: Occasion;
   evidence: Evidence;
   name: string; track: Track; level: number; levelCorrect: number; coins: number; correct: number; streak: number; mastery: Record<SkillTopic, number>;
@@ -90,12 +110,12 @@ export type Player = {
   wins: number; showStreak: number; lastShowCorrect: number; lastShowResult: ShowResult | null; partyTickets: number; parties: number; completed: boolean;
 }
 export function newPlayer(name: string, track: Track): Player {
-  return { equipment: {}, challenge: null, competition: 'runway', evidence: restoreEvidence(), name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, mastery: createMastery(),
+  return { lastLooks: {}, designStars: 0, qualifier: null, usedItems: [], equipment: {}, challenge: null, competition: 'runway', evidence: restoreEvidence(), name, track, level: 1, levelCorrect: 0, coins: 0, correct: 0, streak: 0, mastery: createMastery(),
     owned: ['dress:0-0', 'hair:waves', 'colour:brown', 'makeup:natural'], unlocked: [], credited: [], lastMiss: '',
     dress: '0-0', hair: 'waves', hairColour: 'brown', makeup: 'natural', wins: 0, showStreak: 0, lastShowCorrect: -1, lastShowResult: null,
     partyTickets: 0, parties: 0, completed: false }
 }
-export type Question = { activeMs?: number; attempts?: number; helpUsed?: boolean; difficulty?: number; year?: Track; id: string; topic: Topic; prompt: string; answer: string; options: string[]; hint: string; explanation: string;
+export type Question = { qualifierId?: string; activeMs?: number; attempts?: number; helpUsed?: boolean; difficulty?: number; year?: Track; id: string; topic: Topic; prompt: string; answer: string; options: string[]; hint: string; explanation: string;
   visual?: { kind: 'clock'; hour: number; minute: number } | { kind: 'chart'; bars: { name: string; value: number; colour: string }[] }
     | { kind: 'shape'; shape: 'rectangle' | 'triangle' | 'square' | 'pentagon'; width?: number; height?: number }
     | { kind: 'fraction'; numerator: number; denominator: number }
@@ -194,17 +214,44 @@ export function makeQuestion(player: Player, chosen: Topic = 'mixed', random: Ra
 }
 export function questionContext(player: Player, question: Question) { return evidenceContext(question, question.year || player.track, question.difficulty ?? difficulty(player, question.topic), question.topic, question.activeMs || 0, 'makeover-maths-v1'); }
 export function logQuestion(player: Player, question: Question, type: string = 'question') { const evidence = restoreEvidence(player.evidence); recordEvidence(evidence, questionContext(player, question), type); return { ...player, evidence }; }
-export function answerQuestion(player: Player, question: Question, answer: string) {
+export function qualificationRules(player: Player) {
+  const required = (player.track === 'year1' ? 3 : 5) + competitions.findIndex(c => c.id === player.competition)
+  return { required, seconds: required * (player.track === 'year1' ? 40 : 30) }
+}
+export function startQualification(player: Player, now = Date.now()): Player {
+  if (player.level < competitionFor(player).level) return player
+  const rules = qualificationRules(player)
+  return { ...player, qualifier: { id: crypto.randomUUID(), event: player.competition, deadline: now + rules.seconds * 1000, count: 0, required: rules.required, finishedAt: 0 } }
+}
+export function qualified(player: Player) { return !!player.qualifier?.finishedAt && player.qualifier.event === player.competition }
+export function usedItem(player: Player, key: string) { return player.usedItems.includes(`${player.competition}:${key}`) }
+export function freshOutfit(player: Player) {
+  const pieces = [`dress:${player.dress}`, ...Object.values(player.equipment).map(id => `gear:${id}`)]
+  return pieces.every(key => !usedItem(player, key) && !player.lastLooks[player.competition]?.includes(key))
+}
+export function editionPrice(price: number) { return Math.max(1000, price) }
+export function showPrize(player: Player, result: ShowResult) {
+  if (!result.won) return 0
+  const q = player.qualifier
+  const speed = q && q.finishedAt <= q.deadline - qualificationRules(player).seconds * 250 ? 1 : .75
+  return Math.floor(competitionFor(player).prize * (result.total / 30) * speed)
+}
+export function answerQuestion(player: Player, question: Question, answer: string, now = Date.now()) {
   const topic: SkillTopic = question.topic === 'mixed' ? 'addition' : question.topic
   if (player.credited.includes(question.id)) return { player, correct: answer === question.answer, duplicate: true }
   question.attempts = (question.attempts || 0) + 1;
   const evidence = restoreEvidence(player.evidence);
   recordEvidence(evidence, questionContext(player, question), 'answer', { submittedAnswer: String(answer).slice(0, 1000), attempt: question.attempts, correct: answer === question.answer, helpUsed: question.helpUsed === true, independent: answer === question.answer && question.attempts === 1 && !question.helpUsed && player.lastMiss !== question.id });
-  player = { ...player, evidence };
+  let qualifier = player.qualifier
+  if (qualifier && !qualifier.finishedAt && question.qualifierId === qualifier.id) {
+    if (now > qualifier.deadline || answer !== question.answer || question.helpUsed || question.attempts !== 1) qualifier = null
+    else { const count = qualifier.count + 1; qualifier = { ...qualifier, count, finishedAt: count >= qualifier.required ? now : 0 } }
+  }
+  player = { ...player, evidence, qualifier };
   if (answer !== question.answer) return { player: player.lastMiss === question.id ? player : { ...player, streak: 0, lastMiss: question.id, mastery: { ...player.mastery, [topic]: Math.max(-2, player.mastery[topic] - .25) } }, correct: false, duplicate: false }
   const levelCorrect = player.levelCorrect + 1, advance = levelCorrect >= 3 && !player.completed
   const completed = player.completed || (player.level === 50 && advance)
-  return { player: { ...player, coins: player.coins + questionReward(question), correct: player.correct + 1, streak: player.streak + 1,
+  return { player: { ...player, coins: player.coins + questionReward(question), designStars: player.designStars + starReward(question), correct: player.correct + 1, streak: player.streak + 1,
     mastery: { ...player.mastery, [topic]: Math.min(2, player.mastery[topic] + (player.lastMiss === question.id || question.helpUsed ? 0 : .15)) }, credited: [...player.credited, question.id],
     level: advance && !completed ? player.level + 1 : player.level, levelCorrect: advance && !completed ? 0 : Math.min(3, levelCorrect), completed }, correct: true, duplicate: false }
 }
@@ -219,9 +266,18 @@ export function buyItem(player: Player, category: 'dress' | 'hair' | 'colour' | 
   const item = findItem(category, id)
   const studio = category === 'gear' ? (['eyes', 'lips'].includes((item as Gear)?.slot) ? 'makeup' : (item as Gear)?.slot === 'accessory' ? 'hair' : 'wardrobe') : category === 'dress' ? 'wardrobe' : category === 'makeup' ? 'makeup' : 'hair'
   if (!item || item.unlockLevel > player.level || !player.unlocked.includes(studio)) return player
-  const key = `${category}:${id}`, owned = player.owned.includes(key), cost = owned ? 0 : item.price
-  if (cost > player.coins) return player
-  if (category === 'gear') return { ...player, coins: player.coins - cost, owned: owned ? player.owned : [...player.owned, key], equipment: { ...player.equipment, [(item as Gear).slot]: id } }
+  const key = `${category}:${id}`
+  if (player.lastLooks[player.competition]?.includes(key)) return player
+  const owned = player.owned.includes(key), cost = usedItem(player, key) ? editionPrice(item.price) : owned ? 0 : item.price
+  const stars = cost > 0 ? itemStars(cost) : 0
+  if (cost > player.coins || stars > player.designStars) return player
+  player = { ...player, designStars: player.designStars - stars, usedItems: player.usedItems.filter(used => used !== `${player.competition}:${key}`) }
+  if (category === 'gear') {
+    const equipment = { ...player.equipment }; const slot = (item as Gear).slot
+    if (slot === 'glasses') delete equipment.mask
+    if (slot === 'mask') delete equipment.glasses
+    return { ...player, coins: player.coins - cost, owned: owned ? player.owned : [...player.owned, key], equipment: { ...equipment, [slot]: id } }
+  }
   return { ...player, coins: player.coins - cost, owned: owned ? player.owned : [...player.owned, key], [category === 'colour' ? 'hairColour' : category]: id }
 }
 export const themes = [
@@ -231,23 +287,34 @@ export const themes = [
   { name: 'Golden hour', palettes: ['gold'], description: 'Warm golden tones for a glowing entrance.' },
   { name: 'Midnight magic', palettes: ['blue', 'silver'], description: 'Blue, silver, and a touch of mystery.' },
 ]
-export function themeFor(player: Player) { return themes[(player.correct ? Math.floor((player.correct - 1) / 3) : 0) % themes.length] }
+export function themeFor(player: Player) {
+  if (player.competition === 'sport') return { name: 'Team spirit', palettes: ['green', 'blue'], description: 'Mint and royal blue sportswear for the sunny team court.' }
+  if (player.competition === 'garden') return { name: 'Garden in bloom', palettes: ['pink', 'green'], description: 'Rose pink, sage green, flowers and a little garden sparkle.' }
+  if (player.competition === 'stage') return { name: 'Lavender talent night', palettes: ['purple', 'gold'], description: 'Lavender, gold and star details beneath the theatre spotlights.' }
+  return themes[0]
+}
+export function outfitFitsCompetition(player: Player) {
+  const sporty = dresses.find(d => d.id === player.dress)?.occasion === 'sport'
+  return player.competition === 'sport' ? sporty : !sporty
+}
 export function judgeShow(player: Player): ShowResult {
   const gown = dresses.find(d => d.id === player.dress)!, theme = themeFor(player)
   const event = competitionFor(player)
   const equipped = Object.values(player.equipment).map(id => gear.find(g => g.id === id)!).filter(Boolean)
   const fit = equipped.filter(g => g.occasion === event.id).reduce((sum, g) => sum + g.quality, 0)
-  const matchedTheme = theme.palettes.includes(gown.palette), style = event.id === 'runway' ? Math.min(10, gown.quality + (matchedTheme ? 2 : 0) + Math.floor(fit / 4)) : Math.min(10, 2 + Math.floor(fit / 2))
+  const ready = outfitFitsCompetition(player)
+  const matchedTheme = ready && theme.palettes.includes(gown.palette), style = !ready ? 0 : event.id === 'runway' ? Math.min(10, gown.quality + (matchedTheme ? 2 : 0) + Math.floor(fit / 4)) : Math.min(10, 2 + Math.floor(fit / 2))
   const creativity = Math.min(10, 6 + (player.hair !== 'waves' ? 1 : 0) + (player.hairColour !== 'brown' ? 1 : 0) + (player.makeup !== 'natural' ? 2 : 0) + Math.floor(fit / 5))
   const confidence = Math.min(10, 6 + player.streak)
   const total = style + creativity + confidence, target = event.id === 'runway' ? (player.wins === 0 ? 18 : 20 + Math.floor((player.level - 1) / 17)) : event.target
-  return { style, creativity, confidence, matchedTheme, total, target, won: total >= target }
+  return { style, creativity, confidence, matchedTheme, total, target, won: ready && total >= target }
 }
 export function enterShow(player: Player): { player: Player; result: ShowResult | null } {
-  if (player.level < competitionFor(player).level || player.correct < 1 || player.correct === player.lastShowCorrect) return { player, result: null }
-  const result = judgeShow(player), streak = result.won ? player.showStreak + 1 : 0
-  return { result, player: { ...player, lastShowCorrect: player.correct, lastShowResult: result, wins: player.wins + Number(result.won), showStreak: streak,
-    partyTickets: player.partyTickets + Number(result.won && streak % 3 === 0), coins: player.coins + (result.won ? competitionFor(player).prize : 500) } }
+  if (!outfitFitsCompetition(player) || player.level < competitionFor(player).level || !qualified(player) || !freshOutfit(player)) return { player, result: null }
+  const result = judgeShow(player); result.prize = showPrize(player, result)
+  const streak = result.won ? player.showStreak + 1 : 0
+  return { result, player: { ...player, lastLooks: { ...player.lastLooks, [player.competition]: [`dress:${player.dress}`, ...Object.values(player.equipment).map(id => `gear:${id}`)] }, qualifier: null, usedItems: [...new Set([...player.usedItems, `${player.competition}:dress:${player.dress}`, ...Object.values(player.equipment).map(id => `${player.competition}:gear:${id}`)])], lastShowCorrect: player.correct, lastShowResult: result, wins: player.wins + Number(result.won), showStreak: streak,
+    partyTickets: player.partyTickets + Number(result.won && streak % 3 === 0), coins: player.coins + result.prize } }
 }
 export function enterParty(player: Player): Player {
   if (player.partyTickets < 1) return player
@@ -316,6 +383,24 @@ export function decodeSave(text: string): { players: Player[]; active: number } 
         if (!gear.some(g => g.id === id && g.slot === slot) || !player.owned.includes(`gear:${id}`)) throw new Error('Invalid equipped item.')
         player.equipment[slot as GearSlot] = id as string
       }
+      if (player.equipment.glasses && player.equipment.mask) throw new Error('Choose glasses or a mask.')
+    }
+    if (p.designStars !== undefined) { if (!Number.isSafeInteger(p.designStars) || (p.designStars as number) < 0 || (p.designStars as number) > 10000000) throw new Error('Invalid design stars.'); player.designStars = p.designStars as number }
+    if (p.lastLooks !== undefined) {
+      if (!p.lastLooks || typeof p.lastLooks !== 'object' || Array.isArray(p.lastLooks)) throw new Error('Invalid previous looks.')
+      for (const [event, pieces] of Object.entries(p.lastLooks)) {
+        if (!competitions.some(c => c.id === event) || !Array.isArray(pieces) || pieces.length > 12 || pieces.some(key => typeof key !== 'string' || !safeIds.has(key))) throw new Error('Invalid previous look.')
+        player.lastLooks[event as Occasion] = [...pieces]
+      }
+    }
+    if (p.usedItems !== undefined) {
+      if (!Array.isArray(p.usedItems) || p.usedItems.length > 300 || p.usedItems.some(key => typeof key !== 'string' || !competitions.some(c => key.startsWith(`${c.id}:`) && safeIds.has(key.slice(c.id.length + 1))))) throw new Error('Invalid used styles.')
+      player.usedItems = [...new Set(p.usedItems)] as string[]
+    }
+    if (p.qualifier !== undefined && p.qualifier !== null) {
+      const q = p.qualifier as NonNullable<Player['qualifier']>, rules = qualificationRules(player)
+      if (typeof q.id !== 'string' || q.id.length > 80 || q.event !== player.competition || q.required !== rules.required || ![q.deadline, q.count, q.finishedAt].every(n => Number.isSafeInteger(n) && n >= 0) || q.count > q.required || (q.finishedAt !== 0 && (q.count !== q.required || q.finishedAt > q.deadline))) throw new Error('Invalid qualifier.')
+      player.qualifier = { ...q }
     }
     player.evidence = restoreEvidence(p.evidence);
     player.lastMiss = typeof p.lastMiss === 'string' ? p.lastMiss.slice(0, 80) : ''
@@ -327,6 +412,7 @@ export function decodeSave(text: string): { players: Player[]; active: number } 
         || typeof result.total !== 'number' || result.total !== (result.style as number) + (result.creativity as number) + (result.confidence as number)
         || typeof result.target !== 'number' || !Number.isSafeInteger(result.target) || result.target < 1 || result.target > 30
         || typeof result.matchedTheme !== 'boolean' || typeof result.won !== 'boolean' || result.won !== (result.total >= result.target)) throw new Error('This save has an invalid fashion show result.')
+      if (result.prize !== undefined && (!Number.isSafeInteger(result.prize) || (result.prize as number) < 0 || (result.prize as number) > 2500)) throw new Error('Invalid show prize.')
       player.lastShowResult = result as ShowResult
     }
     player.completed = p.completed === true && player.level === 50 && player.levelCorrect === 3

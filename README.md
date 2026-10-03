@@ -101,3 +101,28 @@ in the shop and on the character; wearable layers follow the original pose.
 Sports, garden and talent competitions have their own generated room backgrounds.
 Assets are cropped from transparent illustration sheets and stored as WebP.
 Existing item IDs, ownership and competition scoring remain compatible with saves.
+
+### Economy and competition rules
+
+Independent first answers earn $250–$1,050 and 1–5 design stars according to
+question difficulty. Hints/retries earn half cash and no stars. New paid pieces
+and fresh editions require both cash and stars (one star per $2,000, rounded
+up). Existing balances, ownership and learning progress are preserved; legacy
+saves start with zero stars. Opening the wardrobe costs $250; the starter
+alternative outfit remains free.
+
+Every competition requires a new timed qualifier using recommended difficulty
+and Surprise mix: Year 1 starts at 3 consecutive independent answers in 120
+seconds; Year 3 starts at 5 in 150 seconds. Each higher event adds one question
+and the corresponding time allowance. A mistake, hint or timeout ends the
+round. Reloading preserves the same deadline; ordinary practice is untimed.
+Winning prizes scale with score and qualifying speed; losing pays no cash.
+
+Outfits and equipped gear are marked used per competition. The immediately
+previous outfit and all its equipped pieces cannot appear in the next entry.
+Choose unused pieces or remove old accessories. Earlier used styles can be
+renewed after rotating by buying fresh editions at the normal price (minimum
+$1,000), plus design stars. This keeps the finite collection playable without
+free repeat entries. Used pieces, previous looks and qualifying progress are
+saved separately for each child. If a recorded voice guide is outdated, the
+reader uses the device voice for the current instructions.

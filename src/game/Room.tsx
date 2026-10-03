@@ -10,14 +10,23 @@ export function Character({ player, thumbnail = false }: { player: Pick<Player, 
   const dress = dresses.find(d => d.id === player.dress) ?? dresses[0]
   const hair = hairstyles.find(h => h.id === player.hair) ?? hairstyles[0]
   const colour = hairColours.find(h => h.id === player.hairColour) ?? hairColours[0]
+  const sporty = dress.occasion === 'sport'
   const hairStyles = { '--hair-filter': colour.filter } as CSSProperties
-  return <span className={`mm-character-art ${thumbnail ? 'thumbnail' : ''}`} style={hairStyles}>
-    <img style={{ clipPath: 'inset(23% 0 0 0)' }} src={assetRoot + dress.asset} alt="" draggable={false} />
+  return <span className={`mm-character-art ${thumbnail ? 'thumbnail' : ''} ${sporty ? `is-sport-outfit mm-${dress.id}` : ''}`} style={hairStyles}>
+    <img style={sporty ? undefined : { clipPath: 'inset(23% 0 0 0)' }} src={assetRoot + dress.asset} alt="" draggable={false} />
     {/* Replace the original head rather than drawing through transparent hair. */}
-    <img className="mm-head-layer" src={assetRoot + hair.asset} alt="" draggable={false} />
+    {(!sporty || player.hair !== 'waves') && <img className="mm-head-layer" style={sporty ? { clipPath: 'polygon(20% 0%,80% 0%,80% 16%,60% 16%,60% 21%,40% 21%,40% 16%,20% 16%)' } : undefined} src={assetRoot + hair.asset} alt="" draggable={false} />}
     {colour.filter !== 'none' && <img className="mm-hair-tint" style={{ clipPath: hairMask }} src={assetRoot + hair.asset} alt="" draggable={false} />}
-    <img className="mm-dress-tint" style={{ filter: dress.filter, clipPath: dressMask }} src={assetRoot + dress.asset} alt="" draggable={false} />
-    {Object.entries(player.equipment ?? {}).map(([slot, id]) => { const item = gear.find(g => g.id === id); return item && <span key={slot} className={`mm-worn-gear mm-worn-${slot}`} style={{ color: item.colour }} title={item.name}><GearArt item={item} wearing /></span> })}
+    {!sporty && <img className="mm-dress-tint" style={{ filter: dress.filter, clipPath: dressMask }} src={assetRoot + dress.asset} alt="" draggable={false} />}
+    {Object.entries(player.equipment ?? {}).map(([slot, id]) => {
+      const item = gear.find(g => g.id === id)
+      if (!item || (sporty && slot === 'shoes' && id === (dress.id === 'sport-mint' ? 'gear-0' : 'gear-1'))) return null
+      return <span key={slot}>
+        <span className={`mm-worn-gear mm-worn-${slot}${slot === 'earrings' ? ' mm-worn-earrings-left' : ''}`} title={item.name}><GearArt item={item} wearing /></span>
+        {slot === 'earrings' && <span className="mm-worn-gear mm-worn-earrings-right" title={item.name}><GearArt item={item} wearing /></span>}
+        {sporty && slot === 'shoes' && <span className="mm-worn-gear mm-worn-shoes-second" title={item.name}><GearArt item={item} wearing /></span>}
+      </span>
+    })}
     {player.makeup !== 'natural' && <span className={`mm-face-detail ${player.makeup}`}><i /><b /><em>✧</em></span>}
   </span>
 }

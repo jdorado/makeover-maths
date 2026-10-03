@@ -185,3 +185,23 @@ body:has(.mm-app){margin:0;background:radial-gradient(ellipse at 70% 0,#f1e8f5 0
 .mm-worn-accessory { top: 1%; left: 37.5%; width: 22%; height: 7%; }
 .mm-worn-eyes { top: 7.5%; left: 44%; width: 11%; height: 2%; opacity: .5; mix-blend-mode: multiply; transform: rotate(8deg); }
 .mm-worn-lips { top: 10.9%; left: 46.3%; width: 4.5%; height: 1.3%; opacity: .65; transform: rotate(8deg); }
+
+.mm-gear-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+.mm-gear-filters label { min-width: 0; font-size: 10px; color: #80648f; }
+.mm-gear-filters select { display: block; width: 100%; min-height: 44px; margin-top: 4px; border: 1px solid #dfcce7; border-radius: 9px; background: #fffcff; padding: 7px; color: #745482; font: inherit; font-size: 11px; }
+.mm-worn-necklace { left: 42%; top: 15.8%; width: 15%; height: 6%; }
+.mm-worn-ring { left: 28.5%; top: 49.3%; width: 1.8%; height: 1.3%; transform: rotate(-16deg); }
+.mm-worn-bracelet { left: 28.3%; top: 44.6%; width: 4%; height: 1.6%; transform: rotate(-12deg); }
+.mm-worn-earrings { left: 40%; top: 9.4%; width: 14%; height: 3.6%; transform: rotate(9deg); }
+.mm-worn-glasses { left: 42%; top: 6.5%; width: 13.5%; height: 3.2%; transform: rotate(9deg); }
+.mm-worn-mask { left: 39.5%; top: 6.1%; width: 18%; height: 4.5%; transform: rotate(9deg); }
+.mm-worn-necklace { top: 14.7%; height: 6.8%; clip-path: inset(24% 0 0 0); }
+.mm-worn-necklace .mm-gear-image { object-fit: fill; }
+.mm-worn-earrings-left { left: 40%; top: 9.5%; width: 2.7%; height: 3.5%; transform: rotate(7deg); }
+.mm-worn-earrings-right { left: 51.7%; top: 10.5%; width: 2.7%; height: 3.5%; transform: rotate(-5deg); }
+.is-sport-outfit .mm-worn-ring { left: 29%; top: 51%; }
+.is-sport-outfit .mm-worn-bracelet { left: 28.8%; top: 47%; }
+.mm-sport-blue .mm-worn-shoes { left: 24.8%; top: 85.3%; width: 12.8%; height: 10.6%; }
+.mm-sport-blue .mm-worn-shoes-second { left: 46.2%; top: 83.2%; width: 12.5%; height: 9.2%; }
+.mm-sport-mint .mm-worn-shoes { left: 36.4%; top: 81.5%; width: 10.8%; height: 10%; }
+.mm-sport-mint .mm-worn-shoes-second { left: 45.5%; top: 87.5%; width: 10.8%; height: 8.5%; }
